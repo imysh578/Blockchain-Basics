@@ -1,7 +1,6 @@
 import React from "react";
 import { FaBars } from "react-icons/fa";
 import {
-	ConnectButton,
 	Container,
 	EmptyBox,
 	Logo,
@@ -16,8 +15,8 @@ import {
 
 const LOGO_IMG = "";
 
-const Navbar = () => {
-
+const Navbar: React.FC<{ toggle: VoidFunction }> = ({toggle}) => {
+	
 	return (
 		<>
 			<Container>
@@ -29,9 +28,9 @@ const Navbar = () => {
 					</Logo>
 
 					{/* Button to open menu */}
-					{/* <OpenMenu>
-						<FaBars />
-					</OpenMenu> */}
+					<OpenMenu>
+						<FaBars onClick={toggle} />
+					</OpenMenu>
 
 					{/* Navbar menu */}
 					<Menu>

@@ -17,20 +17,14 @@ export const color = {
 	dark: "#333",
 	light: "#eee",
 
-	primary: "#1366FF",
-	secondary: "#0643B3",
+	primary: "#FFB412",
+	secondary: "#F69C2E",
 	tertiary: "#2B75FF",
-	quaternary: "#B37A00",
-	quinary: "#FFB412",
 
 	error: "#ff6b6b",
 
 	bg: "#ebebeb",
 	bg1: "rgba(88, 88, 88, 0.1)",
-	bg2: "rgba(88, 88, 88, 0.1)",
-
-	timeLine: "#ddd",
-	arrow: "#ddd",
 };
 
 export const boxShadow = {
@@ -43,9 +37,7 @@ export const zIndex = {
 	navbar: 999,
 	container: 1,
 	content: 10,
-	infoWrap: 2,
-	arrow: 1,
-	pointer: 2,
+	openNavbar: 1000,
 };
 
 export const height = {
