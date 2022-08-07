@@ -25,22 +25,19 @@ export const Container = styled.section`
 
 export const BgWrap = styled.div`
 	${({ theme }) => theme.mixins.flexBox("row", "center", "center")}
-	position: absolute;
-	top: 0;
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
 `;
 
 export const BgImg = styled.img`
-	width: 80%;
-	height: 80%;
+	width: 100%;
 	object-fit: cover;
 `;
 
 export const Content = styled.div`
 	position: absolute;
-	max-width: ${({ theme }) => theme.width.sm};
+	max-width: ${({ theme }) => theme.width.lg};
 	z-index: ${({ theme }) => theme.zIndex.content};
 	padding: 2rem;
 `;
@@ -50,10 +47,9 @@ export const TextWrap = styled.div`
 `;
 
 export const H1 = styled.h1`
-	color: ${({ theme }) => theme.color.white};
+	color: ${({ theme }) => theme.color.dark};
 	font-size: 3rem;
-	text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
-	/* text-align: center; */
+	text-shadow: 1px 1px 3px ${({theme}) => theme.color.primary};
 
 	@media ${({ theme }) => theme.breakpoint.md} {
 		font-size: 2.5rem;
@@ -66,9 +62,9 @@ export const H1 = styled.h1`
 
 export const P = styled.p`
 	margin-top: 1rem;
-	color: ${({ theme }) => theme.color.white};
+	color: ${({ theme }) => theme.color.dark};
 	font-size: 1.5rem;
-	text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+	text-shadow: 1px 1px 3px ${({theme}) => theme.color.primary};
 
 	@media ${({ theme }) => theme.breakpoint.md} {
 		font-size: 1.2rem;
@@ -87,7 +83,7 @@ export const BtnWrap = styled.div`
 export const Btn = styled(LinkR)`
 	${({ theme }) => theme.mixins.flexBox("row", "flex-end", "center")}
 	border-radius: 1rem;
-	background: ${({ theme }) => theme.color.tertiary};
+	background: ${({ theme }) => theme.color.secondary};
 	padding: 1rem 2rem;
 	white-space: nowrap;
 	text-decoration: none;
@@ -96,8 +92,16 @@ export const Btn = styled(LinkR)`
 	transition: all 0.3s ease-in-out;
 
 	&:hover {
-		background: ${({ theme }) => theme.color.quaternary};
+		background: ${({ theme }) => theme.color.tertiary};
 		transform: scale(1.05, 1.05);
+	}
+
+	@media ${({ theme }) => theme.breakpoint.md} {
+		font-size: 1.2rem;
+	}
+
+	@media ${({ theme }) => theme.breakpoint.xs} {
+		font-size: 1rem;
 	}
 `;
 

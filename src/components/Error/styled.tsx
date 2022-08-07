@@ -26,7 +26,7 @@ export const Btn = styled.button`
 
   &:hover{
     cursor: pointer;
-    background-color: ${({theme}) => theme.color.quinary};
+    background-color: ${({theme}) => theme.color.primary};
     color: ${({theme}) => theme.color.white};
   }
 `;

@@ -7,7 +7,7 @@ export const Container = styled.div`
 	height: ${({ theme }) => theme.height.navbar};
 	position: fixed;
 	top: 0;
-	background: ${({ theme }) => theme.color.primary};
+	background: ${({ theme }) => theme.color.dark};
 	z-index: ${({theme}) => theme.zIndex.navbar};
 `;
 
@@ -16,7 +16,7 @@ export const Nav = styled.nav`
 	position: relative;
 	width: 100%;
 	height: ${({ theme }) => theme.height.navbar};
-	padding: 1rem 2rem;
+	padding: 1rem 3rem;
 `;
 
 export const Logo = styled(LinkR)`
@@ -31,7 +31,7 @@ export const LogoImg = styled.img`
 `;
 
 export const LogoH1 = styled.h1`
-	font-size: 1.2rem;
+	font-size: 1.5rem;
 	font-weight: ${({theme}) => theme.fontWeight.semiBold};
 	color: ${({ theme }) => theme.color.white};
 `;
@@ -45,19 +45,15 @@ export const OpenMenu = styled.div`
 		color: ${({ theme }) => theme.color.white};
 		cursor: pointer;
 	}
-
-	@media ${({ theme }) => theme.breakpoint.xs} {
-		font-size: 1.2rem;
-	}
 `;
 
 export const Menu = styled.ul`
 	${({ theme }) => theme.mixins.flexBox("row", "center", "center")}
   gap: 1rem;
 
-	/* @media ${({ theme }) => theme.breakpoint.md} {
+	@media ${({ theme }) => theme.breakpoint.md} {
 		display: none;
-	} */
+	}
 `;
 
 export const MenuItem = styled.li`
@@ -72,31 +68,8 @@ export const MenuLink = styled(LinkR)`
   cursor: pointer;
 
   &:hover {
-    color: ${({theme}) => theme.color.quinary};
+    color: ${({theme}) => theme.color.primary};
   }
-`;
-
-export const ConnectButton = styled.button`
-	padding: 0.5rem;
-	border: 2px solid ${({theme}) => theme.color.white};
-	border-radius: 0.5rem;
-	background: none;
-	font-size: 1rem;
-	text-decoration: none;
-  color: ${({theme}) => theme.color.white};
-	cursor: pointer;
-	&:hover {
-    color: ${({theme}) => theme.color.quinary};
-    border: 2px solid ${({theme}) => theme.color.quinary};
-  }
-
-	&:disabled {
-		cursor: default;
-		&:hover {
-			color: ${({theme}) => theme.color.white};
-			border: 2px solid ${({theme}) => theme.color.white};
-		}
-	}
 `;
 
 export const EmptyBox = styled.div`
