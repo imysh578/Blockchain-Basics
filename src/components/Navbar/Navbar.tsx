@@ -6,6 +6,7 @@ import {
 	Logo,
 	LogoH1,
 	LogoImg,
+	LogoImgBox,
 	Menu,
 	MenuItem,
 	MenuLink,
@@ -13,7 +14,7 @@ import {
 	OpenMenu,
 } from "./styled";
 
-const LOGO_IMG = "";
+const LOGO_IMG = "/assets/images/logo.png";
 
 const Navbar: React.FC<{ toggle: VoidFunction }> = ({toggle}) => {
 	
@@ -23,7 +24,9 @@ const Navbar: React.FC<{ toggle: VoidFunction }> = ({toggle}) => {
 				<Nav>
 					{/* Logo */}
 					<Logo to="/">
-						<LogoImg src={LOGO_IMG} />
+						<LogoImgBox>
+							<LogoImg src={LOGO_IMG} />
+						</LogoImgBox>
 						<LogoH1>SOKURI_CODE</LogoH1>
 					</Logo>
 

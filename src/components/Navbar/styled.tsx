@@ -22,12 +22,21 @@ export const Nav = styled.nav`
 export const Logo = styled(LinkR)`
 	${({ theme }) => theme.mixins.flexBox("row", "center", "center")}
 	width: 12rem;
-	height: 100%;
+	height: ${({ theme }) => theme.height.navbar};
 	text-decoration: none;
+`;
+
+export const LogoImgBox = styled.div`
+	height: 60%;
+	padding: 0.25rem;
+	border-radius: 0.25rem;
+	background-color: white;
+	margin-right: 1rem;
 `;
 
 export const LogoImg = styled.img`
 	height: 100%;
+	object-fit: cover;
 `;
 
 export const LogoH1 = styled.h1`
