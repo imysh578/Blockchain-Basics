@@ -102,7 +102,7 @@ export const components = {
 		${mixins.flexBox(direction, justify, align)}
 		position: relative;
 		padding: 3rem;
-		width: 100vw;
+		min-width: 100vw;
 		min-height: calc(100vh - ${height.navbar});
 	`,
 };

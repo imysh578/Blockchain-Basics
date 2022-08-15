@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar"
 import OpenNavbar from "./components/OpenNavbar"
 import HomePage from "./pages/HomePage"
 import Footer from "./components/Footer"
+import MainContainer from "./components/MainContainer"
 
 function App() {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -29,11 +30,13 @@ function App() {
     <>
       <OpenNavbar isOpen={isMenuOpen} toggle={handleOnClickOpenMenu} />
       <Navbar toggle={handleOnClickOpenMenu}/>
-			<Routes>
-				<Route path="/" >
-					<Route index element={<HomePage/>}/>
-				</Route>
-			</Routes>
+			<MainContainer>
+				<Routes>
+					<Route path="/" >
+						<Route index element={<HomePage/>}/>
+					</Route>
+				</Routes>
+			</MainContainer>
       <Footer />
     </>
   )
