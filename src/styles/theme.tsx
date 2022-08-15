@@ -101,8 +101,7 @@ export const components = {
 	container: (direction = "row", justify = "center", align = "center") => `
 		${mixins.flexBox(direction, justify, align)}
 		position: relative;
-		padding: 3rem;
-		min-width: 100vw;
-		min-height: calc(100vh - ${height.navbar});
+		width: 100%;
+		height: 100%;
 	`,
 };

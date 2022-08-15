@@ -1,6 +1,7 @@
 export const KEYS = {
-	// Recoil
+	// STATE (Recoil)
 	RECOIL_KEY: "RECOIL_KEY",
+	STORED_HASHED_VALUES_STATE: "STORED_HASHED_VALUES_STATE",
 
 	// API (React-query)
 	ASYNC_KEY: "ASYNC_KEY",

@@ -5,6 +5,7 @@ import OpenNavbar from "./components/OpenNavbar"
 import HomePage from "./pages/HomePage"
 import Footer from "./components/Footer"
 import MainContainer from "./components/MainContainer"
+import HashPage from "./pages/HashPage"
 
 function App() {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -34,6 +35,7 @@ function App() {
 				<Routes>
 					<Route path="/" >
 						<Route index element={<HomePage/>}/>
+						<Route path="hash" element={<HashPage/>} />
 					</Route>
 				</Routes>
 			</MainContainer>
