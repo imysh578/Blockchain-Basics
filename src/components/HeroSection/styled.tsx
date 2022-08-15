@@ -3,10 +3,7 @@ import { Link as LinkR } from "react-router-dom";
 import { MdArrowForward, MdKeyboardArrowRight } from "react-icons/md";
 
 export const Container = styled.section`
-	${({ theme }) => theme.mixins.flexBox("row", "center", "center")}
-	position: relative;
-	width: 100vw;
-	min-height: calc(100vh - ${({ theme }) => theme.height.navbar});
+	${({ theme }) => theme.components.container("column", "center", "center")}
 	z-index: ${({ theme }) => theme.zIndex.container};
 	transition: all 0.3s ease-in-out;
 
@@ -36,7 +33,6 @@ export const BgImg = styled.img`
 `;
 
 export const Content = styled.div`
-	position: absolute;
 	max-width: ${({ theme }) => theme.width.lg};
 	z-index: ${({ theme }) => theme.zIndex.content};
 	padding: 2rem;

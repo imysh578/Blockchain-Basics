@@ -21,7 +21,7 @@ const HeroSection = () => {
         </TextWrap>
 
         <BtnWrap>
-          <Btn to="/" 
+          <Btn to="/hash" 
             onMouseEnter={btnHover}
             onMouseLeave={btnHover}
             >
