@@ -28,7 +28,7 @@ const CalHash = () => {
 		setHashedValue(calSHA256);
 	};
 
-	const handleOnClickStore = () => {
+	const handleOnClickCompare = () => {
 		if(!!rawData) {
 			setStoredHashedValues((prev) => [
 				...prev,
@@ -42,7 +42,7 @@ const CalHash = () => {
 
 	const handleOnPressEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
 		if(!e.shiftKey && e.key === "Enter") {
-			handleOnClickStore()
+			handleOnClickCompare()
 		}
 	}
 
@@ -61,7 +61,7 @@ const CalHash = () => {
 					</Box>
 				</Content>
 				<BtnBox>
-					<Btn onClick={handleOnClickStore}>Store</Btn>
+					<Btn onClick={handleOnClickCompare}>Compare</Btn>
 				</BtnBox>
 			</Wrap>
 		</Container>

@@ -1,7 +1,7 @@
-import {atom} from "recoil"
+import { atom } from "recoil";
 
 // client state
 export const state = atom({
-  key: "",
-  default: ""
-})
+	key: "",
+	default: "",
+});

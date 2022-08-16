@@ -16,12 +16,13 @@ export const color = {
 
 	dark: "#333",
 	light: "#eee",
-
+	
 	primary: "#FFB412",
 	secondary: "#F69C2E",
 	tertiary: "#2B75FF",
-
+	
 	error: "#ff6b6b",
+	readonly: "#636363",
 
 	bg: "#ebebeb",
 	bg1: "rgba(88, 88, 88, 0.1)",

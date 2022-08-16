@@ -19,6 +19,8 @@ export const Title = styled.h1`
   color: ${({ theme }) => theme.color.dark};
 	font-size: 2rem;
 	font-weight: ${({ theme }) => theme.fontWeight.bold};
+	border-bottom: 0.25rem double black;
+  margin-bottom: 1rem;
 `;
 
 export const Content = styled.div`
@@ -44,6 +46,7 @@ export const TextArea = styled.textarea`
 	height: 10rem;
 	resize: none;
 	font-size: 1.2rem;
+	padding: 1rem;
 `;
 
 export const Result = styled.h3`
@@ -54,7 +57,6 @@ export const Result = styled.h3`
 export const BtnBox = styled.div`
 	${({ theme }) => theme.mixins.flexBox("row", "flex-end", "center")}
 	width: 100%;
-	padding-right: 2rem;
 `;
 
 export const Btn = styled.button`

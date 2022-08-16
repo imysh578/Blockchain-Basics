@@ -5,4 +5,5 @@ export const Container = styled.main`
   min-width: 100vw;
   min-height: calc(100vh - ${({theme}) => theme.height.navbar});
   padding: 2rem;
+  overflow: auto;
 `;

@@ -4,7 +4,7 @@ import { MerkleTree } from "merkletreejs"
 /**
  * Block Header structure
  */
-class BlockHeader {
+export class BlockHeader {
 	public index: number;
 	public prevHash: string;
 	public merkleRoot: string;
@@ -32,7 +32,7 @@ class BlockHeader {
 /**
  * Block Structure
  */
-export default class Block {
+export class Block {
 	public hash: string;
 	public header: BlockHeader;
 	public body: string[];
@@ -64,7 +64,7 @@ export default class Block {
 		return hash;
 	}
 
-  static mineNewBlock = (lastBlock: Block, data: string[], difficulty: number): Block | null => {
+  static createNewBlock = (lastBlock: Block, data: string[], difficulty: number): Block | null => {
     
     const index = lastBlock.header.index + 1
     const prevHash = lastBlock.hash
@@ -86,7 +86,7 @@ export default class Block {
       newBlockHash = this.calHashOfBlock(newBlockHeader)!
     } while(!this.isValidBlockHash(newBlockHash, difficulty))
 
-    return new Block(newBlockHeader, newBlockHash, data)
+    return new Block(newBlockHash, newBlockHeader, data)
   }
 
   static isValidBlockHash = (hash: string, difficulty: number): boolean => { 

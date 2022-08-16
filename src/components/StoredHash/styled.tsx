@@ -42,7 +42,7 @@ export const RemoveIconBox = styled.div`
 `;
 
 export const RemoveIcon = styled(AiOutlineMinusCircle)`
-	font-size: 1.2rem;
+	font-size: 1.5rem;
 	color: ${({ theme }) => theme.color.dark};
 
 	&:hover {
