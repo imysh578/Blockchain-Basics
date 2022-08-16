@@ -22,7 +22,11 @@ export const Text = styled.span`
   overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: pre-line;
-  width: 25rem;
+	
+	width: 35rem;
+	&:first-child {
+		width: 10rem;
+	}
 `;
 
 export const RightArrow = styled(AiOutlineArrowRight)`

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
 	Container,
 	Wrap,
@@ -14,11 +14,13 @@ import {
 import sha256 from "crypto-js/sha256";
 import { useSetRecoilState } from "recoil";
 import { storedHashedValuesState } from "../../states/recoil/hash";
+const DEFAULT_HASHED_VALUE = sha256("").toString()
 
 const CalHash = () => {
 	const [rawData, setRawData] = useState("");
-	const [hashedValue, setHashedValue] = useState(sha256("").toString());
+	const [hashedValue, setHashedValue] = useState(DEFAULT_HASHED_VALUE);
 	const setStoredHashedValues = useSetRecoilState(storedHashedValuesState);
+	const textAreaRef: React.MutableRefObject<null | HTMLTextAreaElement> = useRef(null);
 
 	const handleOnChangeInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 		const calSHA256 = sha256(e.target.value).toString();
@@ -27,11 +29,22 @@ const CalHash = () => {
 	};
 
 	const handleOnClickStore = () => {
-		setStoredHashedValues((prev) => [
-			...prev,
-			{ rawData: rawData, hasedData: hashedValue },
-		]);
+		if(!!rawData) {
+			setStoredHashedValues((prev) => [
+				...prev,
+				{ rawData: rawData, hasedData: hashedValue },
+			]);
+			textAreaRef.current!.value = ""
+			setRawData("")
+			setHashedValue(DEFAULT_HASHED_VALUE)
+		} else alert("Empty raw data. Please input data and try again.")
 	};
+
+	const handleOnPressEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+		if(!e.shiftKey && e.key === "Enter") {
+			handleOnClickStore()
+		}
+	}
 
 	return (
 		<Container>
@@ -40,7 +53,7 @@ const CalHash = () => {
 				<Content>
 					<Box>
 						<Name>Raw Data</Name>
-						<TextArea onChange={handleOnChangeInput} />
+						<TextArea ref={textAreaRef} onChange={handleOnChangeInput} />
 					</Box>
 					<Box>
 						<Name>Hashed Data</Name>
