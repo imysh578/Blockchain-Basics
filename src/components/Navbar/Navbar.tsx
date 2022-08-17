@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa";
+import OpenNavbar from "./OpenNavbar";
+import { menus } from "./data";
 import {
 	Container,
 	EmptyBox,
@@ -16,10 +18,32 @@ import {
 
 const LOGO_IMG = "/assets/images/logo.png";
 
-const Navbar: React.FC<{ toggle: VoidFunction }> = ({toggle}) => {
-	
+const Navbar = () => {
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const handleOnClickOpenMenu: VoidFunction = () => {
+		setIsMenuOpen((prev) => !prev);
+	};
+
+	const changeNav = () => {
+		if (window.innerWidth >= 900) {
+			setIsMenuOpen(false);
+		}
+	};
+
+	useEffect(() => {
+		window.addEventListener("resize", changeNav);
+		return () => {
+			window.removeEventListener("resize", changeNav);
+		};
+	}, []);
+
 	return (
 		<>
+			<OpenNavbar
+				isOpen={isMenuOpen}
+				toggle={handleOnClickOpenMenu}
+				menus={menus}
+			/>
 			<Container>
 				<Nav>
 					{/* Logo */}
@@ -32,23 +56,16 @@ const Navbar: React.FC<{ toggle: VoidFunction }> = ({toggle}) => {
 
 					{/* Button to open menu */}
 					<OpenMenu>
-						<FaBars onClick={toggle} />
+						<FaBars onClick={handleOnClickOpenMenu} />
 					</OpenMenu>
 
 					{/* Navbar menu */}
 					<Menu>
-						<MenuItem>
-							<MenuLink to="/hash">Hash</MenuLink>
-						</MenuItem>
-						<MenuItem>
-							<MenuLink to="/block">Block</MenuLink>
-						</MenuItem>
-						<MenuItem>
-							<MenuLink to="/blockchain">Blockchain</MenuLink>
-						</MenuItem>
-						<MenuItem>
-							<MenuLink to="/mining">Mining</MenuLink>
-						</MenuItem>
+						{menus.map((menu) => (
+							<MenuItem key={menu}>
+								<MenuLink to={`/${menu.toLowerCase()}`}>{menu}</MenuLink>
+							</MenuItem>
+						))}
 					</Menu>
 				</Nav>
 			</Container>

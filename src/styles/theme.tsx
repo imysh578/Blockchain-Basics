@@ -15,16 +15,17 @@ export const color = {
 	white: "#fff",
 
 	dark: "#333",
+	gray: "#636363",
 	light: "#eee",
-
+	
 	primary: "#FFB412",
 	secondary: "#F69C2E",
-	tertiary: "#2B75FF",
-
+	tertiary: "#5551a4bf",
+	
 	error: "#ff6b6b",
+	readonly: "#636363",
 
 	bg: "#ebebeb",
-	bg1: "rgba(88, 88, 88, 0.1)",
 };
 
 export const boxShadow = {
@@ -51,7 +52,6 @@ export const width = {
 	md: "900px",
 	lg: "1024px",
 	xl: "1280px",
-	timeLine: "8px",
 };
 
 export const breakpoint = {

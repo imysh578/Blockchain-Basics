@@ -22,7 +22,11 @@ export const Text = styled.span`
   overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: pre-line;
-  width: 25rem;
+	
+	width: 35rem;
+	&:first-child {
+		width: 10rem;
+	}
 `;
 
 export const RightArrow = styled(AiOutlineArrowRight)`
@@ -38,7 +42,7 @@ export const RemoveIconBox = styled.div`
 `;
 
 export const RemoveIcon = styled(AiOutlineMinusCircle)`
-	font-size: 1.2rem;
+	font-size: 1.5rem;
 	color: ${({ theme }) => theme.color.dark};
 
 	&:hover {

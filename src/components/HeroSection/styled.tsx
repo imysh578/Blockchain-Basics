@@ -6,18 +6,6 @@ export const Container = styled.section`
 	${({ theme }) => theme.components.container("column", "center", "center")}
 	z-index: ${({ theme }) => theme.zIndex.container};
 	transition: all 0.3s ease-in-out;
-
-	&::before {
-		content: "";
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background: ${({theme}) => theme.color.bg};
-		opacity: 0.1;
-		z-index: calc(${({ theme }) => theme.zIndex.container} + 1);
-	}
 `;
 
 export const BgWrap = styled.div`
