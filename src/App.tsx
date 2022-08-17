@@ -12,28 +12,9 @@ import Loading from "./components/Loading";
 import Error from "./components/Error";
 
 function App() {
-	const [isMenuOpen, setIsMenuOpen] = useState(false);
-	const handleOnClickOpenMenu: VoidFunction = () => {
-		setIsMenuOpen((prev) => !prev);
-	};
-
-	const changeNav = () => {
-		if (window.innerWidth >= 900) {
-			setIsMenuOpen(false);
-		}
-	};
-
-	useEffect(() => {
-		window.addEventListener("resize", changeNav);
-		return () => {
-			window.removeEventListener("resize", changeNav);
-		};
-	}, []);
-
 	return (
 		<>
-			<OpenNavbar isOpen={isMenuOpen} toggle={handleOnClickOpenMenu} />
-			<Navbar toggle={handleOnClickOpenMenu} />
+			<Navbar />
 			<MainContainer>
 				<AsyncBoundary
 					ErrorFallback={(arg) => <Error error={arg.error} />}

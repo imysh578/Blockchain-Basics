@@ -10,10 +10,11 @@ import {
 	SideBtnWrap,
 } from "./styled";
 
-const OpenNavbar: FC<{ isOpen: boolean; toggle: VoidFunction }> = ({
-	isOpen,
-	toggle,
-}) => {
+const OpenNavbar: FC<{
+	isOpen: boolean;
+	toggle: VoidFunction;
+	menus: string[];
+}> = ({ isOpen, toggle }) => {
 	return (
 		<OpenNavbarContainer isOpen={isOpen}>
 			<Icon onClick={toggle}>
@@ -21,23 +22,11 @@ const OpenNavbar: FC<{ isOpen: boolean; toggle: VoidFunction }> = ({
 			</Icon>
 			<OpenNavbarWrapper>
 				<OpenNavbarMenu>
-					<OpenNavbarLink
-						to="section1"
-						onClick={toggle}
-					>
+					<OpenNavbarLink to="section1" onClick={toggle}>
 						Section1
 					</OpenNavbarLink>
-					<OpenNavbarLink
-						to="section2"
-						onClick={toggle}
-					>
+					<OpenNavbarLink to="section2" onClick={toggle}>
 						Section2
-					</OpenNavbarLink>
-					<OpenNavbarLink
-						to="signup"
-						onClick={toggle}
-					>
-						Sign Up
 					</OpenNavbarLink>
 				</OpenNavbarMenu>
 				<SideBtnWrap>
