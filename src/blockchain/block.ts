@@ -1,4 +1,4 @@
-import sha256 from "crypto-js/sha256";
+import sha256 from "crypto-js/sha256.js";
 import { MerkleTree } from "merkletreejs"
 
 /**
@@ -43,15 +43,7 @@ export class Block {
 		this.body = body;
 	}
 
-	static calHashOfBlock = (blockHeader: BlockHeader): string | null => {
-		const isBlockHeaderType = blockHeader instanceof BlockHeader;
-
-    // Wrong type => return null
-		if (!isBlockHeaderType) {
-      console.log("Please check block header's type.")
-      return null
-    };
-
+	static calHashOfBlock = (blockHeader: BlockHeader): string => {
     // Convert header strings to SHA256 hash
 		const headerString: string =
 			blockHeader.index +
@@ -64,15 +56,20 @@ export class Block {
 		return hash;
 	}
 
-  static createNewBlock = (lastBlock: Block, data: string[], difficulty: number): Block | null => {
-    
-    const index = lastBlock.header.index + 1
-    const prevHash = lastBlock.hash
-    
-    // Calculate merkleroot with SHA256
-    const leaves = data.map((str) => sha256(str))
+	static calMerkleRoot = (dataArr: string[]) => {
+		// Calculate merkleroot with SHA256
+		const leaves = dataArr.map(data => sha256(data))
     const merkleTree = new MerkleTree(leaves, sha256)
     const merkleRoot = merkleTree.getRoot().toString('hex')
+		return merkleRoot
+	}
+
+  static createNewBlock = (lastBlock: Block, data: string[], difficulty: number): Block => {
+    const index = !!lastBlock ? lastBlock.header.index + 1 : 0
+    const prevHash = !!lastBlock ? lastBlock.hash : "0".repeat(64)
+    
+    // Calculate merkleroot with SHA256
+    const merkleRoot = this.calMerkleRoot(data)
     
     let timestamp: number
     let nonce: number = 0;
@@ -83,7 +80,7 @@ export class Block {
     do {
       timestamp = Math.round(Date.now()/1000);
       newBlockHeader = new BlockHeader(index, prevHash, merkleRoot, timestamp, difficulty, nonce++);
-      newBlockHash = this.calHashOfBlock(newBlockHeader)!
+      newBlockHash = this.calHashOfBlock(newBlockHeader)
     } while(!this.isValidBlockHash(newBlockHash, difficulty))
 
     return new Block(newBlockHash, newBlockHeader, data)
@@ -92,4 +89,12 @@ export class Block {
   static isValidBlockHash = (hash: string, difficulty: number): boolean => { 
     return hash.startsWith("0".repeat(difficulty))
   }
+
+	static isValidNewBlock = (lastBlock: Block, newBlock: Block): boolean => {
+		if(!lastBlock) return true
+		if(lastBlock.hash === newBlock.hash) return false 
+		if(lastBlock.header.index >= newBlock.header.index) return false 
+		if(lastBlock.header.prevHash === newBlock.header.prevHash) return false 
+		return true
+	}
 }
