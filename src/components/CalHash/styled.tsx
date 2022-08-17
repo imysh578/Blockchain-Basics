@@ -11,7 +11,6 @@ export const Wrap = styled.div`
 	padding: 2rem;
 	border-radius: 1rem;
 	width: 60rem;
-	height: 30rem;
 	box-shadow: ${({ theme }) => theme.boxShadow.style1};
 `;
 
@@ -41,9 +40,15 @@ export const Name = styled.h2`
 	font-weight: ${({ theme }) => theme.fontWeight.semiBold};
 `;
 
+export const Description = styled.h3`
+	color: ${({ theme }) => theme.color.gray};
+  font-size: 1rem;
+	font-weight: ${({ theme }) => theme.fontWeight.medium};
+`;
+
 export const TextArea = styled.textarea`
 	width: 100%;
-	height: 10rem;
+	height: 8rem;
 	resize: none;
 	font-size: 1.2rem;
 	padding: 1rem;
@@ -51,11 +56,12 @@ export const TextArea = styled.textarea`
 
 export const Result = styled.h3`
 	font-weight: ${({ theme }) => theme.fontWeight.medium};
-  color: ${({ theme }) => theme.color.secondary};
+  color: ${({ theme }) => theme.color.tertiary};
 `;
 
 export const BtnBox = styled.div`
 	${({ theme }) => theme.mixins.flexBox("row", "flex-end", "center")}
+	gap: 1rem;
 	width: 100%;
 `;
 
@@ -67,10 +73,10 @@ export const Btn = styled.button`
 	padding: 1rem 1.5rem;
 	cursor: pointer;
 	transition: all 0.3s ease-in-out;
-	background: ${({ theme }) => theme.color.dark};
+	background: ${({ theme, type }) => type === "reset" ? theme.color.error : theme.color.secondary};
 	color: ${({ theme }) => theme.color.white};
 
 	&:hover {
-		background: ${({ theme }) => theme.color.secondary};
+		background: ${({ theme }) => theme.color.dark};
 	}
 `;

@@ -14,7 +14,7 @@ const OpenNavbar: FC<{
 	isOpen: boolean;
 	toggle: VoidFunction;
 	menus: string[];
-}> = ({ isOpen, toggle }) => {
+}> = ({ isOpen, toggle, menus }) => {
 	return (
 		<OpenNavbarContainer isOpen={isOpen}>
 			<Icon onClick={toggle}>
@@ -22,12 +22,13 @@ const OpenNavbar: FC<{
 			</Icon>
 			<OpenNavbarWrapper>
 				<OpenNavbarMenu>
-					<OpenNavbarLink to="section1" onClick={toggle}>
-						Section1
-					</OpenNavbarLink>
-					<OpenNavbarLink to="section2" onClick={toggle}>
-						Section2
-					</OpenNavbarLink>
+					{menus.map((menu) => (
+						<div key={"open-navbar" + menu}>
+							<OpenNavbarLink to={menu.toLowerCase()} onClick={toggle}>
+								{menu}
+							</OpenNavbarLink>
+						</div>
+					))}
 				</OpenNavbarMenu>
 				<SideBtnWrap>
 					<OpenNavbarRoute to="/signin">Sign In</OpenNavbarRoute>

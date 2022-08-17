@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa";
-import OpenNavbar from "../OpenNavbar";
+import OpenNavbar from "./OpenNavbar";
 import { menus } from "./data";
 import {
 	Container,
@@ -62,11 +62,9 @@ const Navbar = () => {
 					{/* Navbar menu */}
 					<Menu>
 						{menus.map((menu) => (
-							<>
-								<MenuItem>
-									<MenuLink to={`/${menu.toLowerCase()}`}>{menu}</MenuLink>
-								</MenuItem>
-							</>
+							<MenuItem key={menu}>
+								<MenuLink to={`/${menu.toLowerCase()}`}>{menu}</MenuLink>
+							</MenuItem>
 						))}
 					</Menu>
 				</Nav>

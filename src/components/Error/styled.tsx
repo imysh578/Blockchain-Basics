@@ -6,13 +6,20 @@ export const Container = styled.section`
 `;
 
 export const ErrorTitle = styled.h1`
-  color: ${({theme}) => theme.color.error};
   font-size: 2rem;
   font-weight: ${({theme}) => theme.fontWeight.bold};
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
   padding: 0.5rem 1rem;
-  border-radius: 1rem;
-  background-color: ${({theme}) => theme.color.bg1};
+  border-top-right-radius: 1rem;
+  border-top-left-radius: 1rem;
+  width: 40rem;
+
+  color: ${({theme}) => theme.color.white};
+  letter-spacing: 0.3rem;
+  background-color: ${({theme}) => theme.color.bg};
+
+  text-shadow: -0.05em 0.03em 0 ${({theme}) => theme.color.secondary},
+    0.06em 0.07em 0 ${({theme}) => theme.color.error};
 `;
 
 export const Box = styled.div`
@@ -20,7 +27,8 @@ export const Box = styled.div`
   width: 40rem;
   padding: 1rem;
   border: .25rem solid ${({theme}) => theme.color.bg};
-  border-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  border-bottom-left-radius: 1rem;
 `;
 
 export const ErrorMsg = styled.p`

@@ -28,12 +28,19 @@ export const SubTitle = styled.h2`
   color: ${({ theme }) => theme.color.dark};
   font-size: 1.5rem;
 	font-weight: ${({ theme }) => theme.fontWeight.semiBold};
-	width: 100%;
-	margin-bottom: 1rem;
-	border-bottom: 2px solid ${({ theme }) => theme.color.white};
+	/* width: 100%;
+	border-bottom: 2px solid ${({ theme }) => theme.color.white}; */
 `;
 
-export const Content = styled.div`
+export const Divider = styled.div`
+	padding: none;
+	margin: none;
+	width: 100%;
+	border: 1px solid ${({ theme }) => theme.color.white};
+	background: ${({ theme }) => theme.color.white};
+`;
+
+export const Form = styled.form`
 	${({ theme }) => theme.mixins.flexBox("row", "flex-start", "flex-start")}
 	width: 100%;
 	gap: 1rem;
@@ -42,10 +49,9 @@ export const Content = styled.div`
 export const Section = styled.section`
   ${({ theme }) => theme.mixins.flexBox("column", "flex-start", "flex-start")}
   padding: 1rem;
-  gap: 0.5rem;
+  gap: 1.25rem;
   width: 100%;
-	height: 32rem;
-  max-height: 32rem;
+	height: 31rem;
   border: 3px solid ${({theme}) => theme.color.white};
   border-radius: 1rem;
 	overflow: auto;
@@ -62,7 +68,6 @@ export const Row = styled.div`
   ${({ theme }) => theme.mixins.flexBox("row", "space-between", "center")}
 	width: 100%;
   gap: 1rem;
-  margin-bottom: 1rem;
 `;
 
 export const Name = styled.h3`
@@ -76,18 +81,22 @@ export const Input = styled.input`
   color: ${({ theme, readOnly }) => readOnly ? theme.color.readonly : theme.color.dark};
   font-size: 1.2rem;
 	font-weight: ${({ theme }) => theme.fontWeight.semiBold};
-  border: 1px solid ${({ theme, readOnly }) => readOnly ? "none" : theme.color.dark};
+  border: 2px solid ${({ theme, readOnly }) => readOnly ? "none" : theme.color.secondary};
   padding: 0.5rem;
+	overflow: hidden;
+	text-overflow: ellipsis;
 `;
 
 export const TextArea = styled.textarea`
 	width: 100%;
-	height: 3rem;
-	padding: .5rem;
-	line-height: 2rem;
+	color: ${({ theme, readOnly }) => readOnly ? theme.color.readonly : theme.color.dark};
+	height: 3.75rem;
+	padding: .25rem;
+	line-height: 1.5rem;
 	resize: none;
 	font-size: 1.2rem;
-	overflow-x: auto;
+	border: 2px solid ${({theme, readOnly}) => readOnly ? "none" : theme.color.secondary};
+	overflow: auto;
 `;
 
 export const BtnBox = styled.div`

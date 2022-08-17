@@ -1,3 +1,5 @@
+import { AxiosError } from "axios";
+
 export {};
 
 declare global {
@@ -6,10 +8,17 @@ declare global {
 		[key: string]: any;
 	}
 
+	/* Type of Error */
 	namespace ErrorType {
 		interface Props {
 			error: AxiosError<AxiosData> | Error;
 			onClick?: Function;
+		}
+
+		interface AxiosData {
+			code: string;
+			message: string;
+			result: boolean;
 		}
 	}
 }

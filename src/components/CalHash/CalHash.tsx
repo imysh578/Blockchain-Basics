@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
 	Container,
 	Wrap,
@@ -10,17 +10,20 @@ import {
 	Box,
 	Btn,
 	BtnBox,
+	Description,
 } from "./styled";
 import sha256 from "crypto-js/sha256";
-import { useSetRecoilState } from "recoil";
+import { useResetRecoilState, useSetRecoilState } from "recoil";
 import { storedHashedValuesState } from "../../states/recoil/hash";
-const DEFAULT_HASHED_VALUE = sha256("").toString()
+const DEFAULT_HASHED_VALUE = sha256("").toString();
 
 const CalHash = () => {
 	const [rawData, setRawData] = useState("");
 	const [hashedValue, setHashedValue] = useState(DEFAULT_HASHED_VALUE);
 	const setStoredHashedValues = useSetRecoilState(storedHashedValuesState);
-	const textAreaRef: React.MutableRefObject<null | HTMLTextAreaElement> = useRef(null);
+	const resetStoredHashedValues = useResetRecoilState(storedHashedValuesState);
+	const textAreaRef: React.MutableRefObject<null | HTMLTextAreaElement> =
+		useRef(null);
 
 	const handleOnChangeInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 		const calSHA256 = sha256(e.target.value).toString();
@@ -29,22 +32,36 @@ const CalHash = () => {
 	};
 
 	const handleOnClickCompare = () => {
-		if(!!rawData) {
-			setStoredHashedValues((prev) => [
-				...prev,
-				{ rawData: rawData, hasedData: hashedValue },
-			]);
-			textAreaRef.current!.value = ""
-			setRawData("")
-			setHashedValue(DEFAULT_HASHED_VALUE)
-		} else alert("Empty raw data. Please input data and try again.")
+		if (!rawData) {
+			alert("Empty raw data. Please input data and try again.");
+			return;
+		}
+
+		setStoredHashedValues((prev) => [
+			...prev,
+			{ rawData: rawData, hasedData: hashedValue },
+		]);
+		textAreaRef.current!.value = textAreaRef.current!.defaultValue;
+		setRawData("");
+		setHashedValue(DEFAULT_HASHED_VALUE);
+	};
+
+	const handleOnClickReset = () => {
+		resetStoredHashedValues();
 	};
 
 	const handleOnPressEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-		if(!e.shiftKey && e.key === "Enter") {
-			handleOnClickCompare()
+		if (e.key === "Enter") {
+			e.preventDefault();
+			if(e.shiftKey) {
+				textAreaRef.current!.value += '\n'
+			} else if(e.ctrlKey) {
+				resetStoredHashedValues()
+			} else {
+				handleOnClickCompare();
+			}
 		}
-	}
+	};
 
 	return (
 		<Container>
@@ -53,7 +70,13 @@ const CalHash = () => {
 				<Content>
 					<Box>
 						<Name>Raw Data</Name>
-						<TextArea ref={textAreaRef} onChange={handleOnChangeInput} />
+						<Description>New line : [Shift + Enter]</Description>
+						<Description>Reset : [Ctrl + Enter]</Description>
+						<TextArea
+							ref={textAreaRef}
+							onChange={handleOnChangeInput}
+							onKeyDown={handleOnPressEnter}
+						/>
 					</Box>
 					<Box>
 						<Name>Hashed Data</Name>
@@ -61,6 +84,9 @@ const CalHash = () => {
 					</Box>
 				</Content>
 				<BtnBox>
+					<Btn type="reset" onClick={handleOnClickReset}>
+						Reset
+					</Btn>
 					<Btn onClick={handleOnClickCompare}>Compare</Btn>
 				</BtnBox>
 			</Wrap>
