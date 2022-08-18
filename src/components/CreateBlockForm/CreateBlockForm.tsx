@@ -23,12 +23,15 @@ import { blockchainState } from "../../states/recoil/blockchain";
 import { Block, BlockHeader } from "../../blockchain/block";
 import { bodyDataInputState } from "../../states/recoil/bodyDataInput";
 import { headerDataInputState } from "../../states/recoil/headerDataInput";
+import { delay } from "../../utils";
 
-const CalBlock = () => {
+const CreateBlockForm = () => {
+	const [newBlock, setNewBlock] = useState<null | Block>(null);
+	const [loading, setLoading] = useState(false);
+
 	const [blockchain, setBlockchain] = useRecoilState(blockchainState);
 	const [headerData, setHeaderData] = useRecoilState(headerDataInputState);
 	const [bodyData, setBodyData] = useRecoilState(bodyDataInputState);
-	const [newBlock, setNewBlock] = useState({} as Block);
 	const resetHeaderData = useResetRecoilState(headerDataInputState);
 	const resetBodyData = useResetRecoilState(bodyDataInputState);
 
@@ -63,19 +66,25 @@ const CalBlock = () => {
 	};
 
 	const handleOnPressEnterBodyData = (
-		e: React.KeyboardEvent<HTMLTextAreaElement>
-	) => {
-		if (e.key === "Enter") {
-			e.preventDefault();
-			if (e.shiftKey) {
-				bodyInputRef.current!.value += "\n";
-			} else if (e.ctrlKey) {
-				resetBodyData();
-			} else {
-				handleOnClickAdd();
-			}
-		}
-	};
+    e: React.KeyboardEvent<HTMLTextAreaElement>
+  ) => {
+
+    // Enter : Add component
+    // Enter + Shift : New line
+    // Enter + Ctrl : Clear
+
+    if (e.key === "Enter" && !e.shiftKey && !e.ctrlKey) {
+      e.preventDefault();
+      handleOnClickAdd();
+    }
+
+    if (e.key === "Enter" && !e.shiftKey && e.ctrlKey) {
+      e.preventDefault();
+      resetBodyData();
+      bodyInputRef.current!.value = bodyInputRef.current!.defaultValue;
+    }
+  };
+
 
 	const handleOnClickRemove = (index: number) => {
 		setBodyData((prev) => {
@@ -89,11 +98,13 @@ const CalBlock = () => {
 		e: React.ChangeEvent<HTMLInputElement>
 	) => {
 		setHeaderData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+		if(e.target.name === "difficulty") setHeaderData((prev) => ({ ...prev, nonce: 0 }));
 	};
 
-	const handleOnClickCreateNewBlock = (e: React.MouseEvent) => {
+	const handleOnClickCreateNewBlock = async (e: React.MouseEvent) => {
 		e.preventDefault();
 		if(!checkRequiredInputs()) return;
+		setLoading(true)
 		const index = headerData.index;
 		const prevHash = headerData.prevHash;
 		const difficulty = headerData.difficulty;
@@ -119,12 +130,15 @@ const CalBlock = () => {
 			);
 			setHeaderData((prev) => ({ ...prev, nonce: nonce++, timestamp }));
 			newBlockHash = Block.calHashOfBlock(newBlockHeader);
+			await delay(1)
 		} while (!Block.isValidBlockHash(newBlockHash, difficulty));
 		const newBlock = new Block(newBlockHash, newBlockHeader, bodyData);
 		setNewBlock(newBlock)
+		setLoading(false)
 	};
 
 	const handleOnClickMine = (e: React.MouseEvent) => {
+		if(!newBlock) return;
 		if(!Block.isValidNewBlock(lastBlock, newBlock)) {
 			alert("Must create block first!")
 			return;
@@ -138,6 +152,7 @@ const CalBlock = () => {
 			prevHash: newBlock.hash,
 			difficulty: newBlock.header.difficulty,
 		}));
+		setNewBlock(null)
 	};
 
 	const checkRequiredInputs = () => {
@@ -173,7 +188,7 @@ const CalBlock = () => {
 								/>
 							</Column>
 							<Column>
-								<Name>Difficulty</Name>
+								<Name className="required">Difficulty</Name>
 								<Input
 									type="number"
 									name="difficulty"
@@ -187,7 +202,7 @@ const CalBlock = () => {
 						</Row>
 						<Row>
 							<Column>
-								<Name>Nonce</Name>
+								<Name className="required">Nonce</Name>
 								<Input
 									type="number"
 									name="nonce"
@@ -246,11 +261,11 @@ const CalBlock = () => {
 						/>
 					</Row>
 					<Btn onClick={handleOnClickCreateNewBlock}>Create</Btn>
-					<Btn onClick={handleOnClickMine}>Mine</Btn>
+					<Btn disabled={!newBlock || loading} onClick={handleOnClickMine}>Mine</Btn>
 				</Row>
 			</Wrap>
 		</Container>
 	);
 };
 
-export default CalBlock;
+export default CreateBlockForm;

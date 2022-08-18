@@ -17,8 +17,7 @@ import { useResetRecoilState, useSetRecoilState } from "recoil";
 import { storedHashedValuesState } from "../../states/recoil/hash";
 const DEFAULT_HASHED_VALUE = sha256("").toString();
 
-const CalHash = () => {
-	const [rawData, setRawData] = useState("");
+const HashForm = () => {
 	const [hashedValue, setHashedValue] = useState(DEFAULT_HASHED_VALUE);
 	const setStoredHashedValues = useSetRecoilState(storedHashedValuesState);
 	const resetStoredHashedValues = useResetRecoilState(storedHashedValuesState);
@@ -27,39 +26,42 @@ const CalHash = () => {
 
 	const handleOnChangeInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 		const calSHA256 = sha256(e.target.value).toString();
-		setRawData(e.target.value);
 		setHashedValue(calSHA256);
 	};
 
 	const handleOnClickCompare = () => {
-		if (!rawData) {
+		const inputData = textAreaRef.current!.value
+		if (!inputData) {
 			alert("Empty raw data. Please input data and try again.");
 			return;
 		}
 
 		setStoredHashedValues((prev) => [
 			...prev,
-			{ rawData: rawData, hasedData: hashedValue },
+			{ rawData: inputData, hasedData: hashedValue },
 		]);
 		textAreaRef.current!.value = textAreaRef.current!.defaultValue;
-		setRawData("");
 		setHashedValue(DEFAULT_HASHED_VALUE);
 	};
 
-	const handleOnClickReset = () => {
+	const handleOnClickClear = () => {
 		resetStoredHashedValues();
+		textAreaRef.current!.value = textAreaRef.current!.defaultValue;
 	};
 
 	const handleOnPressEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-		if (e.key === "Enter") {
+		// Enter : Add component
+		// Enter + Shift : New line
+		// Enter + Ctrl : Clear
+
+		if (e.key === "Enter" && !e.shiftKey && !e.ctrlKey) {
 			e.preventDefault();
-			if(e.shiftKey) {
-				textAreaRef.current!.value += '\n'
-			} else if(e.ctrlKey) {
-				resetStoredHashedValues()
-			} else {
-				handleOnClickCompare();
-			}
+			handleOnClickCompare();
+		}
+
+		if (e.key === "Enter" && !e.shiftKey && e.ctrlKey) {
+			e.preventDefault();
+			handleOnClickClear();
 		}
 	};
 
@@ -70,8 +72,8 @@ const CalHash = () => {
 				<Content>
 					<Box>
 						<Name>Raw Data</Name>
+						<Description>Add to compare : [Enter]</Description>
 						<Description>New line : [Shift + Enter]</Description>
-						<Description>Reset : [Ctrl + Enter]</Description>
 						<TextArea
 							ref={textAreaRef}
 							onChange={handleOnChangeInput}
@@ -84,8 +86,8 @@ const CalHash = () => {
 					</Box>
 				</Content>
 				<BtnBox>
-					<Btn type="reset" onClick={handleOnClickReset}>
-						Reset
+					<Btn type="reset" onClick={handleOnClickClear}>
+						Clear
 					</Btn>
 					<Btn onClick={handleOnClickCompare}>Compare</Btn>
 				</BtnBox>
@@ -94,4 +96,4 @@ const CalHash = () => {
 	);
 };
 
-export default CalHash;
+export default HashForm;

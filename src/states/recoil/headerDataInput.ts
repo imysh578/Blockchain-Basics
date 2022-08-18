@@ -4,7 +4,7 @@ import { KEYS } from "../keys";
 
 const defaultValue: BlockHeader = {
 	index: 0,
-	prevHash: "",
+	prevHash: "0".repeat(64),
 	merkleRoot: "",
 	timestamp: Math.round(Date.now()/1000),
 	difficulty: 1,
