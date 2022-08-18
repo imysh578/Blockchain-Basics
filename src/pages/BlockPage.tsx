@@ -4,6 +4,7 @@ import styled from "styled-components";
 import AsyncBoundary from "../components/AsyncBoundary/AsyncBoundary";
 import Error from "../components/Error";
 import Loading from "../components/Loading";
+import Blocks from "../components/Blocks";
 
 const BlockPage = () => {
 	return (
@@ -14,6 +15,7 @@ const BlockPage = () => {
 			>
 				<Row>
 					<CreateBlockForm />
+					<Blocks />
 				</Row>
 			</AsyncBoundary>
 		</>
