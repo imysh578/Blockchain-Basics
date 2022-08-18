@@ -74,6 +74,13 @@ export const Name = styled.h3`
   color: ${({ theme }) => theme.color.dark};
   font-size: 1.2rem;
 	font-weight: ${({ theme }) => theme.fontWeight.medium};
+	
+	&::after {
+		display: ${({className}) => (className !== "required") && "none"};
+		content: " *";
+		font-size: 1rem;
+		color: ${({theme}) => theme.color.error};
+	}
 `;
 
 export const Input = styled.input`
@@ -112,11 +119,18 @@ export const Btn = styled.button`
 	padding: 1rem 1.5rem;
 	cursor: pointer;
 	transition: all 0.3s ease-in-out;
-	background: ${({ theme }) => theme.color.dark};
+	background: ${({ theme }) => theme.color.secondary};
 	color: ${({ theme }) => theme.color.white};
 
 	&:hover {
-		background: ${({ theme }) => theme.color.secondary};
+		background: ${({ theme }) => theme.color.tertiary};
+	}
+
+	&:disabled {
+		background: ${({ theme }) => theme.color.gray};
+		&:hover {
+			background: ${({ theme }) => theme.color.gray};
+		}
 	}
 `;
 

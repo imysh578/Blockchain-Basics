@@ -64,6 +64,30 @@ export class Block {
 		return merkleRoot
 	}
 
+	static createGenesisBlock = () => {
+		const index = 0
+    const prevHash = "0".repeat(64)
+    const genesisData = ["This is genesis block"]
+
+    // Calculate merkleroot with SHA256
+    const merkleRoot = this.calMerkleRoot(genesisData)
+    
+    let timestamp: number
+    let nonce = 0;
+		let difficulty = 1;
+    
+    let newBlockHeader: BlockHeader
+    let newBlockHash: string;
+
+    do {
+      timestamp = Math.round(Date.now()/1000);
+      newBlockHeader = new BlockHeader(index, prevHash, merkleRoot, timestamp, difficulty, nonce++);
+      newBlockHash = this.calHashOfBlock(newBlockHeader)
+    } while(!this.isValidBlockHash(newBlockHash, difficulty))
+
+    return new Block(newBlockHash, newBlockHeader, genesisData)
+	}
+
   static createNewBlock = (lastBlock: Block, data: string[], difficulty: number): Block => {
     const index = !!lastBlock ? lastBlock.header.index + 1 : 0
     const prevHash = !!lastBlock ? lastBlock.hash : "0".repeat(64)
@@ -90,7 +114,7 @@ export class Block {
     return hash.startsWith("0".repeat(difficulty))
   }
 
-	static isValidNewBlock = (lastBlock: Block, newBlock: Block): boolean => {
+	static isValidNewBlock = (lastBlock: Block | null, newBlock: Block): boolean => {
 		if(!lastBlock) return true
 		if(lastBlock.hash === newBlock.hash) return false 
 		if(lastBlock.header.index >= newBlock.header.index) return false 

@@ -1,5 +1,5 @@
 import React from "react";
-import CalBlock from "../components/CalBlock";
+import CreateBlockForm from "../components/CreateBlockForm";
 import styled from "styled-components";
 import AsyncBoundary from "../components/AsyncBoundary/AsyncBoundary";
 import Error from "../components/Error";
@@ -13,7 +13,7 @@ const BlockPage = () => {
 				SuspenseFallback={<Loading />}
 			>
 				<Row>
-					<CalBlock />
+					<CreateBlockForm />
 				</Row>
 			</AsyncBoundary>
 		</>
