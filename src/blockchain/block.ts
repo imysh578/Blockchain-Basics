@@ -114,7 +114,7 @@ export class Block {
     return hash.startsWith("0".repeat(difficulty))
   }
 
-	static isValidNewBlock = (lastBlock: Block, newBlock: Block): boolean => {
+	static isValidNewBlock = (lastBlock: Block | null, newBlock: Block): boolean => {
 		if(!lastBlock) return true
 		if(lastBlock.hash === newBlock.hash) return false 
 		if(lastBlock.header.index >= newBlock.header.index) return false 

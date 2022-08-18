@@ -26,9 +26,12 @@ import { headerDataInputState } from "../../states/recoil/headerDataInput";
 import { delay } from "../../utils";
 
 const CreateBlockForm = () => {
+	// useStates
 	const [newBlock, setNewBlock] = useState<null | Block>(null);
+	const [lastBlock, setLastBlock] = useState<null | Block>(null);
 	const [loading, setLoading] = useState(false);
 
+	// Recoils
 	const [blockchain, setBlockchain] = useRecoilState(blockchainState);
 	const [headerData, setHeaderData] = useRecoilState(headerDataInputState);
 	const [bodyData, setBodyData] = useRecoilState(bodyDataInputState);
@@ -43,13 +46,9 @@ const CreateBlockForm = () => {
 	const bodyInputRef: React.MutableRefObject<null | HTMLTextAreaElement> =
 		useRef(null);
 
-	let lastBlock = blockchain[blockchain.length - 1];
-
 	useEffect(() => {
-		lastBlock = blockchain[blockchain.length - 1];
-		console.log(headerData);
-		console.log(blockchain);
-	}, [blockchain]);
+		setLastBlock(blockchain[blockchain.length - 1] || null);
+	}, []);
 
 	useEffect(() => {
 		const result = Block.calMerkleRoot(bodyData);
@@ -68,7 +67,6 @@ const CreateBlockForm = () => {
 	const handleOnPressEnterBodyData = (
     e: React.KeyboardEvent<HTMLTextAreaElement>
   ) => {
-
     // Enter : Add component
     // Enter + Shift : New line
     // Enter + Ctrl : Clear
