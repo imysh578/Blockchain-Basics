@@ -46,6 +46,7 @@ const CreateBlockForm = () => {
 	const bodyInputRef: React.MutableRefObject<null | HTMLTextAreaElement> =
 		useRef(null);
 
+	// useEffects
 	useEffect(() => {
 		setLastBlock(blockchain[blockchain.length - 1] || null);
 	}, []);
@@ -55,6 +56,7 @@ const CreateBlockForm = () => {
 		setHeaderData((prev) => ({ ...prev, merkleRoot: result }));
 	}, [bodyData]);
 
+	// functions for handling events
 	const handleOnClickAdd = () => {
 		if (!bodyInputRef.current?.value) {
 			alert("Empty raw data. Please input data and try again.");
@@ -65,24 +67,23 @@ const CreateBlockForm = () => {
 	};
 
 	const handleOnPressEnterBodyData = (
-    e: React.KeyboardEvent<HTMLTextAreaElement>
-  ) => {
-    // Enter : Add component
-    // Enter + Shift : New line
-    // Enter + Ctrl : Clear
+		e: React.KeyboardEvent<HTMLTextAreaElement>
+	) => {
+		// Enter : Add component
+		// Enter + Shift : New line
+		// Enter + Ctrl : Clear
 
-    if (e.key === "Enter" && !e.shiftKey && !e.ctrlKey) {
-      e.preventDefault();
-      handleOnClickAdd();
-    }
+		if (e.key === "Enter" && !e.shiftKey && !e.ctrlKey) {
+			e.preventDefault();
+			handleOnClickAdd();
+		}
 
-    if (e.key === "Enter" && !e.shiftKey && e.ctrlKey) {
-      e.preventDefault();
-      resetBodyData();
-      bodyInputRef.current!.value = bodyInputRef.current!.defaultValue;
-    }
-  };
-
+		if (e.key === "Enter" && !e.shiftKey && e.ctrlKey) {
+			e.preventDefault();
+			resetBodyData();
+			bodyInputRef.current!.value = bodyInputRef.current!.defaultValue;
+		}
+	};
 
 	const handleOnClickRemove = (index: number) => {
 		setBodyData((prev) => {
@@ -96,13 +97,14 @@ const CreateBlockForm = () => {
 		e: React.ChangeEvent<HTMLInputElement>
 	) => {
 		setHeaderData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-		if(e.target.name === "difficulty") setHeaderData((prev) => ({ ...prev, nonce: 0 }));
+		if (e.target.name === "difficulty")
+			setHeaderData((prev) => ({ ...prev, nonce: 0 }));
 	};
 
 	const handleOnClickCreateNewBlock = async (e: React.MouseEvent) => {
 		e.preventDefault();
-		if(!checkRequiredInputs()) return;
-		setLoading(true)
+		if (!checkRequiredInputs()) return;
+		setLoading(true);
 		const index = headerData.index;
 		const prevHash = headerData.prevHash;
 		const difficulty = headerData.difficulty;
@@ -128,17 +130,17 @@ const CreateBlockForm = () => {
 			);
 			setHeaderData((prev) => ({ ...prev, nonce: nonce++, timestamp }));
 			newBlockHash = Block.calHashOfBlock(newBlockHeader);
-			await delay(1)
+			await delay(1);
 		} while (!Block.isValidBlockHash(newBlockHash, difficulty));
 		const newBlock = new Block(newBlockHash, newBlockHeader, bodyData);
-		setNewBlock(newBlock)
-		setLoading(false)
+		setNewBlock(newBlock);
+		setLoading(false);
 	};
 
 	const handleOnClickMine = (e: React.MouseEvent) => {
-		if(!newBlock) return;
-		if(!Block.isValidNewBlock(lastBlock, newBlock)) {
-			alert("Must create block first!")
+		if (!newBlock) return;
+		if (!Block.isValidNewBlock(lastBlock, newBlock)) {
+			alert("Must create block first!");
 			return;
 		}
 		setBlockchain((prev) => [...prev, newBlock]);
@@ -150,9 +152,10 @@ const CreateBlockForm = () => {
 			prevHash: newBlock.hash,
 			difficulty: newBlock.header.difficulty,
 		}));
-		setNewBlock(null)
+		setNewBlock(null);
 	};
 
+	// Other functions
 	const checkRequiredInputs = () => {
 		let inputForm: HTMLFormElement | null = document.querySelector(
 			"#create-new-block-form"
@@ -164,8 +167,16 @@ const CreateBlockForm = () => {
 			return false;
 		}
 
-		return true
+		return true;
 	};
+
+	const isReadyToMine = () =>
+		!newBlock ||
+		loading ||
+		!Block.isValidBlockHash(
+			Block.calHashOfBlock(headerData),
+			headerData.difficulty
+		);
 
 	return (
 		<Container>
@@ -259,7 +270,9 @@ const CreateBlockForm = () => {
 						/>
 					</Row>
 					<Btn onClick={handleOnClickCreateNewBlock}>Create</Btn>
-					<Btn disabled={!newBlock || loading} onClick={handleOnClickMine}>Mine</Btn>
+					<Btn disabled={isReadyToMine()} onClick={handleOnClickMine}>
+						Mine
+					</Btn>
 				</Row>
 			</Wrap>
 		</Container>
