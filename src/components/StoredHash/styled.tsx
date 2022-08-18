@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { AiOutlineMinusCircle, AiOutlineArrowRight } from "react-icons/ai";
 
-export const Container = styled.main`
+export const Container = styled.div`
   ${({ theme }) => theme.components.container("column", "center", "center")}
   margin-top: 1rem;
 `;

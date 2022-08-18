@@ -22,10 +22,13 @@ export const color = {
 	secondary: "#F69C2E",
 	tertiary: "#5551a4bf",
 	
+	success: "#6dd784",
 	error: "#ff6b6b",
 	readonly: "#636363",
 
 	bg: "#ebebeb",
+	successBg: "#6dd78433",
+	errorBg: "#ff6b6b33",
 };
 
 export const boxShadow = {

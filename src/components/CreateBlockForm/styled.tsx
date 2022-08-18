@@ -1,19 +1,21 @@
 import styled from "styled-components";
 import { AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
 
-export const Container = styled.main`
+export const Container = styled.div`
 	${({ theme }) => theme.components.container("column", "center", "center")}
-	
+	width: 100%;
+  min-height: calc(100vh - ${({theme}) => theme.height.navbar} - 4rem);
 `;
 
 export const Wrap = styled.div`
 	${({ theme }) => theme.mixins.flexBox("column", "flex-start", "center")}
+	width: 40rem;
 	gap:1rem;
 	background: ${({ theme }) => theme.color.bg};
 	padding: 2rem;
 	border-radius: 1rem;
-	width: 40rem;
 	box-shadow: ${({ theme }) => theme.boxShadow.style1};
+	height: 45rem;
 `;
 
 export const Title = styled.h1`
@@ -28,8 +30,6 @@ export const SubTitle = styled.h2`
   color: ${({ theme }) => theme.color.dark};
   font-size: 1.5rem;
 	font-weight: ${({ theme }) => theme.fontWeight.semiBold};
-	/* width: 100%;
-	border-bottom: 2px solid ${({ theme }) => theme.color.white}; */
 `;
 
 export const Divider = styled.div`
