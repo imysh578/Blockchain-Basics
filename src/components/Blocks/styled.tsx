@@ -14,14 +14,6 @@ export const Wrap = styled.div`
 	border-radius: 1rem;
 `;
 
-export const Title = styled.h1`
-	color: ${({ theme }) => theme.color.dark};
-	font-size: 2rem;
-	font-weight: ${({ theme }) => theme.fontWeight.bold};
-	border-bottom: 0.25rem double ${({ theme }) => theme.color.black};
-	margin-bottom: 1rem;
-`;
-
 export const Content = styled.div`
 	${({ theme }) => theme.mixins.flexBox("column", "flex-start", "center")}
 	gap: 1rem;
@@ -38,12 +30,12 @@ export const Block = styled.div`
 	border-radius: 1rem;
 `;
 
-export const BlockName = styled.h2`
+export const Title = styled.h2`
 	color: ${({ theme }) => theme.color.dark};
 	font-size: 1.25rem;
 	font-weight: ${({ theme }) => theme.fontWeight.semiBold};
 	width: 100%;
-	height: 3rem;
+	height: 3.25rem;
 	padding: 0.75rem;
 	border-bottom: 2px solid ${({ theme }) => theme.color.black};
   background: ${({ theme }) => theme.color.bg};

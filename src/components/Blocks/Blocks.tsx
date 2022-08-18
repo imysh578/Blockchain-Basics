@@ -4,7 +4,6 @@ import { blockchainState } from "../../states/recoil/blockchain";
 import {
 	Attribute,
 	Block,
-	BlockName,
 	Column,
 	Container,
 	Content,
@@ -29,7 +28,7 @@ const Blocks = () => {
 						.map((block) => (
 							<>
 								<Block>
-									<BlockName>Block #{block.header.index}</BlockName>
+									<Title>Block #{block.header.index}</Title>
 									<DataWrap>
 										<Column>
                       <DataBox>
