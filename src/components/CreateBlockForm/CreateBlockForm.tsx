@@ -146,6 +146,7 @@ const CreateBlockForm = () => {
 		setBlockchain((prev) => [...prev, newBlock]);
 		resetBodyData();
 		resetHeaderData();
+		bodyInputRef.current!.value = bodyInputRef.current!.defaultValue;
 		setHeaderData((prev) => ({
 			...prev,
 			index: newBlock.header.index + 1,

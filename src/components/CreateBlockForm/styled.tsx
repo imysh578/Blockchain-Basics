@@ -129,6 +129,7 @@ export const Btn = styled.button`
 	&:disabled {
 		background: ${({ theme }) => theme.color.gray};
 		&:hover {
+			cursor: no-drop;
 			background: ${({ theme }) => theme.color.gray};
 		}
 	}

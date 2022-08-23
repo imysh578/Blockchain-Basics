@@ -52,6 +52,7 @@ const RightArrow = styled(AiOutlineArrowRight)`
   color: ${({theme}) => theme.color.white};
   background: ${({theme}) => theme.color.dark};
   border-radius: 50%;
+	z-index: ${({theme}) => theme.zIndex.upper};
 `;
 
 export default BlockPage;

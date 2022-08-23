@@ -41,6 +41,7 @@ export const zIndex = {
 	navbar: 999,
 	container: 1,
 	content: 10,
+	upper: 20,
 	openNavbar: 1000,
 };
 

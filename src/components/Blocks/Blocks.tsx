@@ -34,7 +34,7 @@ const Blocks = () => {
                       <DataBox>
                         <Row>
                           <Attribute>Hash</Attribute>
-                          <Description>{block.hash}</Description>
+                          <Description className="important-value">{block.hash}</Description>
                         </Row>
                       </DataBox>
 
@@ -55,7 +55,7 @@ const Blocks = () => {
                           </Row>
                           <Row>
                             <Attribute>Prev Hash</Attribute>
-                            <Description className="hash-value">{block.header.prevHash}</Description>
+                            <Description className="important-value">{block.header.prevHash}</Description>
                           </Row>
                         </Column>
                       </DataBox>
@@ -63,8 +63,8 @@ const Blocks = () => {
                         <SubTitle>Body</SubTitle>
                         <Row>
                           <Column>
-                            <Attribute>Body</Attribute>
-                            <Description>{block.header.difficulty}</Description>
+                            {!block.body.length && <Description>Empty</Description>}
+                            {block.body.map((data) => <Description>{data}</Description>)}
                           </Column>
                         </Row>
                       </DataBox>
