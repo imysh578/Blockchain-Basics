@@ -2,7 +2,7 @@ import axios from "axios";
 import React from "react";
 import { Btn, Container, ErrorTitle, ErrorMsg, Box, BtnBox } from "./styled";
 
-const Error: React.FC<ErrorType.Props> = ({ error, onClick }) => {
+const Error: React.FC<ErrorComponent.Props> = ({ error, onClick }) => {
 	// Handle on click Exit button
 	const handleOnClick = () => {
 		if (!onClick) window.location.reload();

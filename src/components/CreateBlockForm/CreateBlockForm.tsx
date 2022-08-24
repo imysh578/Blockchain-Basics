@@ -29,7 +29,6 @@ const CreateBlockForm = () => {
 	// useStates
 	const [newBlock, setNewBlock] = useState<null | Block>(null);
 	const [lastBlock, setLastBlock] = useState<null | Block>(null);
-	const [loading, setLoading] = useState(false);
 
 	// Recoils
 	const [blockchain, setBlockchain] = useRecoilState(blockchainState);
@@ -104,7 +103,6 @@ const CreateBlockForm = () => {
 	const handleOnClickCreateNewBlock = async (e: React.MouseEvent) => {
 		e.preventDefault();
 		if (!checkRequiredInputs()) return;
-		setLoading(true);
 		const index = headerData.index;
 		const prevHash = headerData.prevHash;
 		const difficulty = headerData.difficulty;
@@ -119,7 +117,7 @@ const CreateBlockForm = () => {
 		let newBlockHash: string;
 
 		do {
-			timestamp = Math.round(Date.now() / 1000);
+			timestamp = Date.now();
 			newBlockHeader = new BlockHeader(
 				index,
 				prevHash,
@@ -134,10 +132,9 @@ const CreateBlockForm = () => {
 		} while (!Block.isValidBlockHash(newBlockHash, difficulty));
 		const newBlock = new Block(newBlockHash, newBlockHeader, bodyData);
 		setNewBlock(newBlock);
-		setLoading(false);
 	};
 
-	const handleOnClickMine = (e: React.MouseEvent) => {
+	const handleOnClickMine = () => {
 		if (!newBlock) return;
 		if (!Block.isValidNewBlock(lastBlock, newBlock)) {
 			alert("Must create block first!");
@@ -172,9 +169,9 @@ const CreateBlockForm = () => {
 	};
 
 	const isReadyToMine = () =>
-		!newBlock ||
-		loading ||
-		!Block.isValidBlockHash(
+		!!newBlock &&
+		
+		Block.isValidBlockHash(
 			Block.calHashOfBlock(headerData),
 			headerData.difficulty
 		);
@@ -271,7 +268,7 @@ const CreateBlockForm = () => {
 						/>
 					</Row>
 					<Btn onClick={handleOnClickCreateNewBlock}>Create</Btn>
-					<Btn disabled={isReadyToMine()} onClick={handleOnClickMine}>
+					<Btn disabled={!isReadyToMine()} onClick={handleOnClickMine}>
 						Mine
 					</Btn>
 				</Row>

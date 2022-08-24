@@ -4,7 +4,7 @@ import styled from "styled-components";
 import AsyncBoundary from "../components/AsyncBoundary/AsyncBoundary";
 import Error from "../components/Error";
 import Loading from "../components/Loading";
-import Blocks from "../components/Blocks";
+import CreatedBlocks from "../components/CreatedBlocks";
 import { AiOutlineArrowRight } from "react-icons/ai";
 
 const BlockPage = () => {
@@ -18,7 +18,7 @@ const BlockPage = () => {
 					<CreateBlockForm />
 					<Divider/>
 					<RightArrow/>
-					<Blocks />
+					<CreatedBlocks />
 				</Row>
 			</AsyncBoundary>
 		</>
