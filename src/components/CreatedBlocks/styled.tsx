@@ -1,8 +1,10 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-	${({ theme }) => theme.components.container("column", "center", "flex-start")}
+	${({ theme }) => theme.components.container("column", "center", "center")}
 	width: 100%;
+	min-height: calc(100vh - ${({ theme }) => theme.height.navbar} - 4rem);
+  padding: 1rem;
 `;
 
 export const Wrap = styled.div`
@@ -12,14 +14,14 @@ export const Wrap = styled.div`
 	gap: 1rem;
 	border-radius: 1rem;
   overflow: auto;
-	padding: 2rem;
 `;
 
 export const Content = styled.div`
 	${({ theme }) => theme.mixins.flexBox("row", "flex-start", "center")}
 	gap: 2rem;
-	width: 100%;
-	height: 100%;
+	width: 40rem;
+	height: 45rem;
+	padding: 1rem;
 `;
 
 export const Block = styled.div`
@@ -27,8 +29,6 @@ export const Block = styled.div`
 	height: 35rem;
 	border: 2px solid ${({ theme }) => theme.color.black};
 	border-radius: 1rem;
-
-  ${({theme}) => theme.animation.fadeIn()}
 `;
 
 export const Title = styled.h2`

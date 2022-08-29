@@ -1,18 +1,20 @@
 import styled from "styled-components";
-import { AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
+import { AiOutlinePlusCircle, AiOutlineMinusCircle,AiOutlineArrowRight } from "react-icons/ai";
 
-export const Container = styled.main`
+export const Container = styled.div`
 	${({ theme }) => theme.components.container("column", "center", "center")}
-	
+	width: 100%;
+  min-height: calc(100vh - ${({theme}) => theme.height.navbar} - 4rem);
 `;
 
 export const Wrap = styled.div`
 	${({ theme }) => theme.mixins.flexBox("column", "flex-start", "center")}
+	width: 40rem;
+	height: 45rem;
 	gap:1rem;
 	background: ${({ theme }) => theme.color.bg};
 	padding: 2rem;
 	border-radius: 1rem;
-	width: 40rem;
 	box-shadow: ${({ theme }) => theme.boxShadow.style1};
 `;
 
@@ -28,8 +30,6 @@ export const SubTitle = styled.h2`
   color: ${({ theme }) => theme.color.dark};
   font-size: 1.5rem;
 	font-weight: ${({ theme }) => theme.fontWeight.semiBold};
-	/* width: 100%;
-	border-bottom: 2px solid ${({ theme }) => theme.color.white}; */
 `;
 
 export const Divider = styled.div`
@@ -68,6 +68,8 @@ export const Row = styled.div`
   ${({ theme }) => theme.mixins.flexBox("row", "space-between", "center")}
 	width: 100%;
   gap: 1rem;
+	${({theme}) => theme.animation.fadeIn}
+
 `;
 
 export const Name = styled.h3`
@@ -129,6 +131,7 @@ export const Btn = styled.button`
 	&:disabled {
 		background: ${({ theme }) => theme.color.gray};
 		&:hover {
+			cursor: no-drop;
 			background: ${({ theme }) => theme.color.gray};
 		}
 	}
@@ -154,4 +157,27 @@ export const RemoveIcon = styled(AiOutlineMinusCircle)`
 		cursor: pointer;
     color: ${({ theme }) => theme.color.primary};
 	}
+`;
+
+export const RightLine = styled.div`
+	position: absolute;
+  left: 50%;
+  top: 50%;
+	transform: translate(-50%, -50%);
+	width: 2px;
+	height: 90%;
+	background: ${({theme}) => theme.color.dark};
+`;
+
+export const RightArrow = styled(AiOutlineArrowRight)`
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%, -50%);
+	font-size: 2rem;
+	padding: 0.25rem;
+  color: ${({theme}) => theme.color.white};
+  background: ${({theme}) => theme.color.dark};
+  border-radius: 50%;
+	z-index: ${({theme}) => theme.zIndex.upper};
 `;

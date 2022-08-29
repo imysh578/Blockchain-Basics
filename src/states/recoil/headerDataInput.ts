@@ -6,7 +6,7 @@ const defaultValue: BlockHeader = {
 	index: 0,
 	prevHash: "0".repeat(64),
 	merkleRoot: "",
-	timestamp: Math.round(Date.now()/1000),
+	timestamp: Date.now(),
 	difficulty: 1,
 	nonce: 0,
 }

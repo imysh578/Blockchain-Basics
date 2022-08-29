@@ -22,10 +22,13 @@ export const color = {
 	secondary: "#F69C2E",
 	tertiary: "#5551a4bf",
 	
+	success: "#6dd784",
 	error: "#ff6b6b",
 	readonly: "#636363",
 
 	bg: "#ebebeb",
+	successBg: "#6dd78433",
+	errorBg: "#ff6b6b33",
 };
 
 export const boxShadow = {
@@ -38,6 +41,7 @@ export const zIndex = {
 	navbar: 999,
 	container: 1,
 	content: 10,
+	upper: 20,
 	openNavbar: 1000,
 };
 
@@ -95,6 +99,55 @@ export const mixins = {
 		return;
 	},
 };
+
+export const animation = {
+	fadeIn: (transition = "0.5", period = "0.5", repeat = "1") => `
+		transition: all ${transition}s;
+		animation: fadeIn ${period}s ${repeat};
+
+		@keyframes fadeIn {
+			0% {
+				opacity: 0;
+			}
+
+			100% {
+				opacity: 1;
+			}
+		}
+	`,
+
+	rightToLeft: (transition = "0.", period = "1", repeat = "1") => `
+		transition: all ${transition}s;
+		animation: rightToLeft ${period}s ${repeat};
+
+		@keyframes rightToLeft {
+			0% {
+				transform: translateX(-100%);
+			}
+
+			100% {
+				transfrom: translateX(0%);
+			}
+		}
+	`,
+
+	scaleUp: (transition = "0.5", period = "1", repeat = "1") => `
+		transition: all ${transition}s;
+		animation: scaleUp ${period}s ${repeat};
+
+		@keyframes scaleUp {
+			0% {
+				transform: scale(0);
+				opacity: 0;
+			}
+
+			100% {
+				transform: scale(1);
+				opacity: 1;
+			}
+		}
+	`,
+}
 
 export const components = {
 	// defualt settings for common components

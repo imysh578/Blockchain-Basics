@@ -5,7 +5,13 @@ import { MdArrowForward, MdKeyboardArrowRight } from "react-icons/md";
 export const Container = styled.section`
 	${({ theme }) => theme.components.container("column", "center", "center")}
 	z-index: ${({ theme }) => theme.zIndex.container};
-	transition: all 0.3s ease-in-out;
+	min-height: calc(100vh - ${({theme}) => theme.height.navbar} - 4rem);
+`;
+
+export const Content = styled.div`
+	max-width: ${({ theme }) => theme.width.lg};
+	z-index: ${({ theme }) => theme.zIndex.content};
+	padding: 2rem;
 `;
 
 export const BgWrap = styled.div`
@@ -18,12 +24,6 @@ export const BgWrap = styled.div`
 export const BgImg = styled.img`
 	width: 100%;
 	object-fit: cover;
-`;
-
-export const Content = styled.div`
-	max-width: ${({ theme }) => theme.width.lg};
-	z-index: ${({ theme }) => theme.zIndex.content};
-	padding: 2rem;
 `;
 
 export const TextWrap = styled.div`

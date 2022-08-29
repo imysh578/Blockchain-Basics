@@ -1,5 +1,6 @@
 import sha256 from "crypto-js/sha256.js";
 import { MerkleTree } from "merkletreejs"
+import { Tx } from "./transaction";
 
 /**
  * Block Header structure
@@ -35,9 +36,9 @@ export class BlockHeader {
 export class Block {
 	public hash: string;
 	public header: BlockHeader;
-	public body: string[];
+	public body: string[] | Tx[];
 
-	constructor(hash: string, header: BlockHeader, body: string[]) {
+	constructor(hash: string, header: BlockHeader, body: string[] | Tx[]) {
 		this.hash = hash;
 		this.header = header;
 		this.body = body;
@@ -56,62 +57,26 @@ export class Block {
 		return hash;
 	}
 
-	static calMerkleRoot = (dataArr: string[]) => {
+	static calMerkleRoot = (dataArr: string[] | Tx[]) => {
 		// Calculate merkleroot with SHA256
-		const leaves = dataArr.map(data => sha256(data))
+		const leaves = dataArr.map(data => {
+			if(data instanceof Tx) return sha256(data.from + data.to + data.amount)
+			else return sha256(data)
+		})
     const merkleTree = new MerkleTree(leaves, sha256)
     const merkleRoot = merkleTree.getRoot().toString('hex')
 		return merkleRoot
 	}
 
-	static createGenesisBlock = () => {
-		const index = 0
-    const prevHash = "0".repeat(64)
-    const genesisData = ["This is genesis block"]
+  static isValidBlockHash = (hash: string, difficulty: number): boolean => {
+		let leadingZeros = 0;
 
-    // Calculate merkleroot with SHA256
-    const merkleRoot = this.calMerkleRoot(genesisData)
-    
-    let timestamp: number
-    let nonce = 0;
-		let difficulty = 1;
-    
-    let newBlockHeader: BlockHeader
-    let newBlockHash: string;
-
-    do {
-      timestamp = Math.round(Date.now()/1000);
-      newBlockHeader = new BlockHeader(index, prevHash, merkleRoot, timestamp, difficulty, nonce++);
-      newBlockHash = this.calHashOfBlock(newBlockHeader)
-    } while(!this.isValidBlockHash(newBlockHash, difficulty))
-
-    return new Block(newBlockHash, newBlockHeader, genesisData)
-	}
-
-  static createNewBlock = (lastBlock: Block, data: string[], difficulty: number): Block => {
-    const index = !!lastBlock ? lastBlock.header.index + 1 : 0
-    const prevHash = !!lastBlock ? lastBlock.hash : "0".repeat(64)
-    
-    // Calculate merkleroot with SHA256
-    const merkleRoot = this.calMerkleRoot(data)
-    
-    let timestamp: number
-    let nonce: number = 0;
-    
-    let newBlockHeader: BlockHeader
-    let newBlockHash: string;
-
-    do {
-      timestamp = Math.round(Date.now()/1000);
-      newBlockHeader = new BlockHeader(index, prevHash, merkleRoot, timestamp, difficulty, nonce++);
-      newBlockHash = this.calHashOfBlock(newBlockHeader)
-    } while(!this.isValidBlockHash(newBlockHash, difficulty))
-
-    return new Block(newBlockHash, newBlockHeader, data)
-  }
-
-  static isValidBlockHash = (hash: string, difficulty: number): boolean => { 
-    return hash.startsWith("0".repeat(difficulty))
+		for (let i = 0; i < hash.length; i++) {
+			if(hash[i] !== "0") break;
+			leadingZeros++;
+		}
+    return leadingZeros >= difficulty
+    // return hash.startsWith("0".repeat(difficulty))
   }
 
 	static isValidNewBlock = (lastBlock: Block | null, newBlock: Block): boolean => {
@@ -120,5 +85,35 @@ export class Block {
 		if(lastBlock.header.index >= newBlock.header.index) return false 
 		if(lastBlock.header.prevHash === newBlock.header.prevHash) return false 
 		return true
+	}
+
+	static createNewBlock = (header: BlockHeader, bodyData: Tx[]) => {
+		const index = header.index;
+		const prevHash = header.prevHash;
+		const difficulty = header.difficulty;
+
+		// Calculate merkleroot with SHA256
+		const merkleRoot = Block.calMerkleRoot(bodyData);
+
+		let timestamp: number;
+		let nonce: number = header.nonce;
+
+		let newBlockHeader: BlockHeader;
+		let newBlockHash: string;
+
+		do {
+			timestamp = Date.now();
+			newBlockHeader = new BlockHeader(
+				index,
+				prevHash,
+				merkleRoot,
+				timestamp,
+				difficulty,
+				nonce
+			);
+			newBlockHash = Block.calHashOfBlock(newBlockHeader);
+		} while (!Block.isValidBlockHash(newBlockHash, difficulty));
+
+		const newBlock = new Block(newBlockHash, newBlockHeader, bodyData);
 	}
 }
