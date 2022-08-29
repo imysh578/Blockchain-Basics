@@ -4,6 +4,8 @@ import { AiOutlineMinusCircle, AiOutlineArrowRight } from "react-icons/ai";
 export const Container = styled.div`
   ${({ theme }) => theme.components.container("column", "center", "center")}
   margin-top: 1rem;
+
+	${({theme}) => theme.animation.fadeIn()}
 `;
 
 export const Wrap = styled.div`
@@ -13,7 +15,6 @@ export const Wrap = styled.div`
   min-height: 2rem;
 	border: 2px ${({ theme }) => theme.color.dark} solid;
 	border-radius: 1rem;
-	transition: all 0.2s ease-in-out;
 `;
 
 export const Text = styled.span`

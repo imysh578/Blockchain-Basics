@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
+import { AiOutlinePlusCircle, AiOutlineMinusCircle,AiOutlineArrowRight } from "react-icons/ai";
 
 export const Container = styled.div`
 	${({ theme }) => theme.components.container("column", "center", "center")}
@@ -10,12 +10,12 @@ export const Container = styled.div`
 export const Wrap = styled.div`
 	${({ theme }) => theme.mixins.flexBox("column", "flex-start", "center")}
 	width: 40rem;
+	height: 45rem;
 	gap:1rem;
 	background: ${({ theme }) => theme.color.bg};
 	padding: 2rem;
 	border-radius: 1rem;
 	box-shadow: ${({ theme }) => theme.boxShadow.style1};
-	height: 45rem;
 `;
 
 export const Title = styled.h1`
@@ -68,6 +68,8 @@ export const Row = styled.div`
   ${({ theme }) => theme.mixins.flexBox("row", "space-between", "center")}
 	width: 100%;
   gap: 1rem;
+	${({theme}) => theme.animation.fadeIn}
+
 `;
 
 export const Name = styled.h3`
@@ -155,4 +157,27 @@ export const RemoveIcon = styled(AiOutlineMinusCircle)`
 		cursor: pointer;
     color: ${({ theme }) => theme.color.primary};
 	}
+`;
+
+export const RightLine = styled.div`
+	position: absolute;
+  left: 50%;
+  top: 50%;
+	transform: translate(-50%, -50%);
+	width: 2px;
+	height: 90%;
+	background: ${({theme}) => theme.color.dark};
+`;
+
+export const RightArrow = styled(AiOutlineArrowRight)`
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%, -50%);
+	font-size: 2rem;
+	padding: 0.25rem;
+  color: ${({theme}) => theme.color.white};
+  background: ${({theme}) => theme.color.dark};
+  border-radius: 50%;
+	z-index: ${({theme}) => theme.zIndex.upper};
 `;

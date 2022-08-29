@@ -16,6 +16,7 @@ import {
 	RemoveIcon,
 	AddIcon,
 	Divider,
+	RightArrow,
 } from "./styled";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import DEFAULT from "./data";
@@ -273,6 +274,7 @@ const CreateBlockForm = () => {
 					</Btn>
 				</Row>
 			</Wrap>
+			<RightArrow/>
 		</Container>
 	);
 };
