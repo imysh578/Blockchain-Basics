@@ -22,6 +22,7 @@ const Blocks: React.FC<BlockComponent.Props> = ({ peer }) => {
 
 	return (
 		<Container>
+			{!!peer && <h1>Peer {peer}</h1>}
 			<Wrap>
 				<Content>
 					{/* Blocks */}
