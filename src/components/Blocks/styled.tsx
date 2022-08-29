@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-	${({ theme }) => theme.components.container("column", "center", "center")}
+	${({ theme }) => theme.components.container("column", "center", "flex-start")}
 	width: 100%;
 	min-height: calc(100vh - ${({ theme }) => theme.height.navbar} - 4rem);
   padding: 1rem;

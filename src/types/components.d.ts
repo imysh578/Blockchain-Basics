@@ -16,7 +16,7 @@ declare global {
 
 	namespace BlockComponent {
 		interface Props {
-			peer: number;
+			peer?: number;
 		}
 	}
 }

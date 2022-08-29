@@ -11,7 +11,10 @@ const PeerPage = () => {
 				ErrorFallback={(arg) => <Error error={arg.error} />}
 				SuspenseFallback={<Loading />}
 			>
+        <Blocks />
         <Blocks peer={1} />
+        <Blocks peer={2} />
+        <Blocks peer={3} />
 			</AsyncBoundary>
     </>
   )

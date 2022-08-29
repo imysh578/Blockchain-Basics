@@ -60,8 +60,8 @@ export class Block {
 	static calMerkleRoot = (dataArr: string[] | Tx[]) => {
 		// Calculate merkleroot with SHA256
 		const leaves = dataArr.map(data => {
-			if(data instanceof Tx) sha256(data.from + data.to + data.amount)
-			else sha256(data)
+			if(data instanceof Tx) return sha256(data.from + data.to + data.amount)
+			else return sha256(data)
 		})
     const merkleTree = new MerkleTree(leaves, sha256)
     const merkleRoot = merkleTree.getRoot().toString('hex')

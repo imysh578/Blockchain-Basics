@@ -6,6 +6,7 @@ import Error from "../components/Error";
 import Loading from "../components/Loading";
 import CreatedBlocks from "../components/CreatedBlocks";
 import { AiOutlineArrowRight } from "react-icons/ai";
+import Blocks from "../components/Blocks";
 
 const BlockPage = () => {
 	return (
@@ -16,9 +17,11 @@ const BlockPage = () => {
 			>
 				<Row>
 					<CreateBlockForm />
-					<Divider/>
-					<RightArrow/>
-					<CreatedBlocks />
+					<>
+						<Divider/>
+						<RightArrow/>
+					</>
+					<Blocks />
 				</Row>
 			</AsyncBoundary>
 		</>

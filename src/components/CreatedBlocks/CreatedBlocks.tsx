@@ -18,7 +18,7 @@ import {
 
 const CreatedBlocks = () => {
 	const blockchain = useRecoilValue(blockchainState);
-  new Date()
+  
 	return (
 		<Container>
 			<Wrap>
@@ -67,7 +67,6 @@ const CreatedBlocks = () => {
                         <SubTitle>Body</SubTitle>
                         <Row>
                           <Column>
-                            {!block.body.length && <Description>Empty</Description>}
                             {block.body.map((data) => <Description>{data as string}</Description>)}
                           </Column>
                         </Row>
