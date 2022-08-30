@@ -16,15 +16,14 @@ export const Wrap = styled.div`
 `;
 
 export const Content = styled.div`
-	${({ theme }) => theme.mixins.flexBox("row", "flex-start", "center")}
+	${({ theme }) => theme.mixins.flexBox("row", "flex-start", "flex-start")}
 	gap: 2rem;
 	width: 100%;
 	height: 100%;
 `;
 
-export const Block = styled.div`
+export const BlockWrap = styled.div`
 	width: 32rem;
-	height: 35rem;
 	border: 2px solid ${({ theme }) => theme.color.black};
 	border-radius: 1rem;
 
@@ -57,16 +56,17 @@ export const SubTitle = styled.h2`
 export const Column = styled.div`
 	${({ theme }) => theme.mixins.flexBox("column", "flex-start", "flex-start")}
 	gap: 1rem;
-  height: 100%;
+	width: 100%;
+  /* height: 100%; */
 `;
 
 export const Row = styled.div`
 	${({ theme }) => theme.mixins.flexBox("row", "flex-start", "flex-start")}
-  width: 100%;
+  max-width: 100%;
 	gap: 1rem;
 `;
 
-export const DataWrap = styled.div`
+export const DataWrap = styled.form`
 	width: 100%;
 	height: calc(100% - 3.25rem);
 	padding: 1rem;
@@ -84,16 +84,22 @@ export const DataBox = styled.div`
   background: ${({ theme }) => theme.color.white};
 `;
 
+export const TextBox = styled.div`
+	
+`
+
 export const Attribute = styled.h3`
 	width: 8rem;
 	color: ${({ theme }) => theme.color.black};
 	font-size: 1rem;
 	font-weight: ${({ theme }) => theme.fontWeight.medium};
+	line-height: 2.1rem;
 `;
 
-export const Description = styled.h4`
+export const Input = styled.input`
 	width: 25rem;
 	color: ${({ theme }) => theme.color.dark};
+	background: ${({ theme, readOnly }) => !readOnly && theme.color.light};
 	font-size: 1rem;
 	font-weight: ${({ theme }) => theme.fontWeight.light};
 	overflow: hidden;
@@ -103,4 +109,7 @@ export const Description = styled.h4`
     color: ${theme.color.tertiary};
     font-weight: ${theme.fontWeight.semiBold};
   `)};
+	border: none;
+	border-radius: .25rem;
+	padding: .5rem;
 `;

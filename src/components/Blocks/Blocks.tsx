@@ -1,16 +1,17 @@
 import React from "react";
+import { Block } from "../../blockchain/block";
 import { Tx } from "../../blockchain/transaction";
 import { useCreatePeerBlocks } from "../../hooks/useCreatePeerBlocks";
 
 import {
 	Attribute,
-	Block,
+	BlockWrap,
 	Column,
 	Container,
 	Content,
 	DataBox,
 	DataWrap,
-	Description,
+	Input,
 	Row,
 	SubTitle,
 	Title,
@@ -18,7 +19,31 @@ import {
 } from "./styled";
 
 const Blocks: React.FC<BlockComponent.Props> = ({ peer }) => {
-	const blockchain = useCreatePeerBlocks(peer);
+	const [blockchain, setBlockchain] = useCreatePeerBlocks(peer);
+
+	const handleOnChangeHeader = (e: React.FormEvent<HTMLDivElement>, index: number) => {
+		setBlockchain(prev => {
+			let blocksCopy = [...prev]
+			let blockCopy = {...prev[index]}
+			blockCopy = {...blockCopy, [e.target.name]: e.target.value}
+			blocksCopy[index] = blockCopy
+			return blocksCopy
+		})
+	}
+
+	const handleOnChangeBody = (e: React.FormEvent<HTMLDivElement>, index: number, bodyIndex: number) => {
+		setBlockchain(prev => {
+			let blocksCopy = [...prev]
+			let blockCopy = {...prev[index]}
+			let bodyCopy = {...prev[index]}.body
+			
+			bodyCopy = []
+			blockCopy.body = bodyCopy
+			blocksCopy[index] = blockCopy
+			console.log(prev[index])
+			return blocksCopy
+		})
+	}
 
 	return (
 		<Container>
@@ -27,46 +52,36 @@ const Blocks: React.FC<BlockComponent.Props> = ({ peer }) => {
 				<Content>
 					{/* Blocks */}
 					{blockchain
-						.map((block) => (
-							<Block key={block.hash}>
+						.map((block, index) => (
+							<BlockWrap key={block.hash}>
 								<Title>Block #{block.header.index}</Title>
 								<DataWrap>
 									<Column>
 										<DataBox>
 											<Row>
 												<Attribute>Hash</Attribute>
-												<Description className="important-value">
-													{block.hash}
-												</Description>
+												<Input className="important-value" defaultValue={block.hash} spellCheck={false} readOnly/>
 											</Row>
 										</DataBox>
 
-										<DataBox>
+										<DataBox onChange={e => handleOnChangeHeader(e, index)}>
 											<SubTitle>Header</SubTitle>
 											<Column>
 												<Row>
 													<Attribute>Difficulty</Attribute>
-													<Description>{block.header.difficulty}</Description>
+													<Input name="difficulty" defaultValue={block.header.difficulty} type="number" />
 												</Row>
 												<Row>
 													<Attribute>Nonce</Attribute>
-													<Description>{block.header.nonce}</Description>
-												</Row>
-												<Row>
-													<Attribute>timestamp</Attribute>
-													<Description>
-														{new Date(block.header.timestamp).toUTCString()}
-													</Description>
+													<Input name="nonce" defaultValue={block.header.nonce} type="number" />
 												</Row>
 												<Row>
 													<Attribute>Merkle Root</Attribute>
-													<Description>{block.header.merkleRoot}</Description>
+													<Input name="merkleroot" defaultValue={block.header.merkleRoot} spellCheck={false} />
 												</Row>
 												<Row>
 													<Attribute>Prev Hash</Attribute>
-													<Description className="important-value">
-														{block.header.prevHash}
-													</Description>
+													<Input name="prevhash" className="important-value" defaultValue={block.header.prevHash} spellCheck={false} />
 												</Row>
 											</Column>
 										</DataBox>
@@ -74,32 +89,27 @@ const Blocks: React.FC<BlockComponent.Props> = ({ peer }) => {
 											<SubTitle>Body</SubTitle>
 											<Row>
 												<Column>
-													{block.body.map((data, index) => {
-														if (typeof data === "string")
-															return (
-																<Description key={data + index}>
-																	{data}
-																</Description>
-															);
-														else if (data instanceof Tx)
-															return (
-																<div
+													{block.body.map(
+														(data, bodyIndex) =>
+															!(typeof data === "string") && (
+																<Row
 																	key={
 																		data.from + data.to + data.amount + index
 																	}
+																	onChange={e => handleOnChangeBody(e, index, bodyIndex)}
 																>
-																	<Description>{data.from}</Description>
-																	<Description>{data.to}</Description>
-																	<Description>{data.amount}</Description>
-																</div>
-															);
-													})}
+																	<Attribute>From:</Attribute> <Input defaultValue={data.from} spellCheck={false}/>
+																	<Attribute>To:</Attribute> <Input defaultValue={data.to} spellCheck={false}/>
+																	<Attribute>$</Attribute> <Input defaultValue={data.amount} type="number"/>
+																</Row>
+															)
+													)}
 												</Column>
 											</Row>
 										</DataBox>
 									</Column>
 								</DataWrap>
-							</Block>
+							</BlockWrap>
 						))
 						.reverse()}
 				</Content>

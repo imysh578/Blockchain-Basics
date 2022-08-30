@@ -13,7 +13,6 @@ const PeerPage = () => {
 				SuspenseFallback={<Loading />}
 			>
         <Column>
-          <Blocks />
           <Blocks peer={1} />
           <Blocks peer={2} />
           <Blocks peer={3} />

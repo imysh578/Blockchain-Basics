@@ -1,6 +1,9 @@
 import { atom } from "recoil";
-import { Block } from "../../blockchain/block";
+import { Block, BlockHeader } from "../../blockchain/block";
+import { Tx } from "../../blockchain/transaction";
 import { KEYS } from "../keys";
+import { blockData } from "./data";
+
 
 export const blockchainState = atom({
 	key: KEYS.BLOCKCHAIN_STATE,
@@ -9,15 +12,15 @@ export const blockchainState = atom({
 
 export const peerOneBlockchainState = atom({
 	key: KEYS.PEER_ONE_BLOCKCHAIN_STATE,
-	default: [] as Block[],
+	default: blockData as Block[],
 });
 
 export const peerTwoBlockchainState = atom({
 	key: KEYS.PEER_TWO_BLOCKCHAIN_STATE,
-	default: [] as Block[],
+	default: blockData as Block[],
 });
 
 export const peerThreeBlockchainState = atom({
 	key: KEYS.PEER_THREE_BLOCKCHAIN_STATE,
-	default: [] as Block[],
+	default: blockData as Block[],
 });

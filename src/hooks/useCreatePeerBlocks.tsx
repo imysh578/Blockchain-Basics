@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Tx } from "../blockchain/transaction";
 import { ec } from "elliptic";
 import { blockchainState, peerOneBlockchainState, peerThreeBlockchainState, peerTwoBlockchainState } from "../states/recoil/blockchain";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 
 const EC = new ec("secp256k1")
@@ -34,7 +34,6 @@ export const useCreatePeerBlocks = (peer?: number) => {
 			chainState = blockchainState;
 			break;
 	}
-  const blockchain = useRecoilValue(chainState)
 
-  return blockchain;
+  return useRecoilState(chainState)
 };

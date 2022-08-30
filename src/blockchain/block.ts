@@ -60,8 +60,8 @@ export class Block {
 	static calMerkleRoot = (dataArr: string[] | Tx[]) => {
 		// Calculate merkleroot with SHA256
 		const leaves = dataArr.map(data => {
-			if(data instanceof Tx) return sha256(data.from + data.to + data.amount)
-			else return sha256(data)
+			if(typeof data === "string") return sha256(data)
+			else return sha256(data.from + data.to + data.amount)
 		})
     const merkleTree = new MerkleTree(leaves, sha256)
     const merkleRoot = merkleTree.getRoot().toString('hex')
@@ -109,11 +109,19 @@ export class Block {
 				merkleRoot,
 				timestamp,
 				difficulty,
-				nonce
+				nonce++
 			);
 			newBlockHash = Block.calHashOfBlock(newBlockHeader);
 		} while (!Block.isValidBlockHash(newBlockHash, difficulty));
 
 		const newBlock = new Block(newBlockHash, newBlockHeader, bodyData);
+		return newBlock
+	}
+
+	static mineNewBlock = (newBlock: Block, blocks: Block[]): boolean => {
+		if(!this.isValidNewBlock(blocks[blocks.length-1], newBlock)) return false
+		
+		blocks.push(newBlock)
+		return true;
 	}
 }

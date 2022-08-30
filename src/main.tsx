@@ -14,7 +14,7 @@ const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById("root")!).render(
 	<QueryClientProvider client={queryClient}>
 		{/* ReactQuery DevTools */}
-		<ReactQueryDevtools initialIsOpen={false} />
+		{/* <ReactQueryDevtools initialIsOpen={false} /> */}
 		<RecoilRoot>
 			<BrowserRouter>
 				<ThemeProvider theme={theme}>
