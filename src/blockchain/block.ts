@@ -33,12 +33,12 @@ export class BlockHeader {
 /**
  * Block Structure
  */
-export class Block {
+export class Block<T> {
 	public hash: string;
 	public header: BlockHeader;
-	public body: string[] | Tx[];
+	public body: T[];
 
-	constructor(hash: string, header: BlockHeader, body: string[] | Tx[]) {
+	constructor(hash: string, header: BlockHeader, body: T[]) {
 		this.hash = hash;
 		this.header = header;
 		this.body = body;
@@ -68,7 +68,7 @@ export class Block {
 		return merkleRoot
 	}
 
-  static isValidBlockHash = (hash: string, difficulty: number): boolean => {
+  static findValidBlockHash = (hash: string, difficulty: number): boolean => {
 		let leadingZeros = 0;
 
 		for (let i = 0; i < hash.length; i++) {
@@ -79,11 +79,27 @@ export class Block {
     // return hash.startsWith("0".repeat(difficulty))
   }
 
-	static isValidNewBlock = (lastBlock: Block | null, newBlock: Block): boolean => {
+	static isValidBlockHash = (block: Block<any>) => {
+		if(!this.findValidBlockHash(block.hash, block.header.difficulty)) return false
+		if(this.calHashOfBlock(block.header) !== block.hash) return false
+		return true
+	}
+
+	static isValidBlock = (prevBlock: Block<any> | undefined, currentBlock: Block<any>): boolean => {
+		if(!prevBlock) return true
+		if(prevBlock.hash === currentBlock.hash) return false 
+		if(prevBlock.header.index >= currentBlock.header.index) return false 
+		if(prevBlock.hash !== currentBlock.header.prevHash) return false 
+		if(!this.isValidBlockHash(currentBlock)) return false
+		return true
+	}
+
+	static isValidNewBlock = (lastBlock: Block<any> | null | undefined, newBlock: Block<any>): boolean => {
 		if(!lastBlock) return true
 		if(lastBlock.hash === newBlock.hash) return false 
 		if(lastBlock.header.index >= newBlock.header.index) return false 
-		if(lastBlock.header.prevHash === newBlock.header.prevHash) return false 
+		if(lastBlock.hash !== newBlock.header.prevHash) return false 
+		if(!this.isValidBlockHash(newBlock)) return false
 		return true
 	}
 
@@ -112,13 +128,13 @@ export class Block {
 				nonce++
 			);
 			newBlockHash = Block.calHashOfBlock(newBlockHeader);
-		} while (!Block.isValidBlockHash(newBlockHash, difficulty));
+		} while (!Block.findValidBlockHash(newBlockHash, difficulty));
 
 		const newBlock = new Block(newBlockHash, newBlockHeader, bodyData);
 		return newBlock
 	}
 
-	static mineNewBlock = (newBlock: Block, blocks: Block[]): boolean => {
+	static mineNewBlock = (newBlock: Block<any>, blocks: Block<any>[]): boolean => {
 		if(!this.isValidNewBlock(blocks[blocks.length-1], newBlock)) return false
 		
 		blocks.push(newBlock)

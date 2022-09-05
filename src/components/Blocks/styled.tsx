@@ -26,8 +26,6 @@ export const BlockWrap = styled.div`
 	width: 32rem;
 	border: 2px solid ${({ theme }) => theme.color.black};
 	border-radius: 1rem;
-
-  ${({theme}) => theme.animation.fadeIn()}
 `;
 
 export const Title = styled.h2`
@@ -70,7 +68,7 @@ export const DataWrap = styled.form`
 	width: 100%;
 	height: calc(100% - 3.25rem);
 	padding: 1rem;
-	background: ${({ theme }) => theme.color.successBg};
+	background: ${({ theme, className }) => className !== "invalid" ? theme.color.successBg : theme.color.errorBg};
 	border-bottom-left-radius: 1rem;
 	border-bottom-right-radius: 1rem;
 	overflow: auto;
@@ -112,4 +110,33 @@ export const Input = styled.input`
 	border: none;
 	border-radius: .25rem;
 	padding: .5rem;
+`;
+
+export const BtnBox = styled.div`
+	${({ theme }) => theme.mixins.flexBox("row", "flex-end", "center")}
+	width: 100%;
+`;
+
+export const Btn = styled.button`
+  font-size: 1.2rem;
+	text-decoration: none;
+	border: none;
+	border-radius: 0.75rem;
+	padding: 1rem 1.5rem;
+	cursor: pointer;
+	transition: all 0.3s ease-in-out;
+	background: ${({ theme }) => theme.color.secondary};
+	color: ${({ theme }) => theme.color.white};
+
+	&:hover {
+		background: ${({ theme }) => theme.color.tertiary};
+	}
+
+	&:disabled {
+		background: ${({ theme }) => theme.color.gray};
+		&:hover {
+			cursor: no-drop;
+			background: ${({ theme }) => theme.color.gray};
+		}
+	}
 `;

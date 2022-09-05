@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Block } from "../../blockchain/block";
-import { Tx } from "../../blockchain/transaction";
 import { useCreatePeerBlocks } from "../../hooks/useCreatePeerBlocks";
 
 import {
@@ -16,101 +15,167 @@ import {
 	SubTitle,
 	Title,
 	Wrap,
+	BtnBox,
+	Btn
 } from "./styled";
 
 const Blocks: React.FC<BlockComponent.Props> = ({ peer }) => {
-	const [blockchain, setBlockchain] = useCreatePeerBlocks(peer);
+	const {blockchain, handleOnChangeHeader, handleOnChangeBody} = useCreatePeerBlocks(peer);
 
-	const handleOnChangeHeader = (e: React.FormEvent<HTMLDivElement>, index: number) => {
-		setBlockchain(prev => {
-			let blocksCopy = [...prev]
-			let blockCopy = {...prev[index]}
-			blockCopy = {...blockCopy, [e.target.name]: e.target.value}
-			blocksCopy[index] = blockCopy
-			return blocksCopy
-		})
-	}
-
-	const handleOnChangeBody = (e: React.FormEvent<HTMLDivElement>, index: number, bodyIndex: number) => {
-		setBlockchain(prev => {
-			let blocksCopy = [...prev]
-			let blockCopy = {...prev[index]}
-			let bodyCopy = {...prev[index]}.body
-			
-			bodyCopy = []
-			blockCopy.body = bodyCopy
-			blocksCopy[index] = blockCopy
-			console.log(prev[index])
-			return blocksCopy
-		})
-	}
+	useEffect(() => {
+		console.log(blockchain)
+	}, [blockchain])
 
 	return (
 		<Container>
-			{!!peer && <h1>Peer {peer}</h1>}
+			{<h1>Peer {peer}</h1>}
 			<Wrap>
 				<Content>
 					{/* Blocks */}
 					{blockchain
-						.map((block, index) => (
-							<BlockWrap key={block.hash}>
-								<Title>Block #{block.header.index}</Title>
-								<DataWrap>
-									<Column>
-										<DataBox>
-											<Row>
-												<Attribute>Hash</Attribute>
-												<Input className="important-value" defaultValue={block.hash} spellCheck={false} readOnly/>
-											</Row>
-										</DataBox>
+						.map((block, index) => {
+							const blockHashRef: React.MutableRefObject<null | HTMLInputElement> = useRef(null)
+							const merkleRootRef: React.MutableRefObject<null | HTMLInputElement> = useRef(null)
+							const dataWrapRef: React.MutableRefObject<null | HTMLFormElement> = useRef(null)
 
-										<DataBox onChange={e => handleOnChangeHeader(e, index)}>
-											<SubTitle>Header</SubTitle>
-											<Column>
+							useEffect(() => {
+								if(!dataWrapRef.current) return
+								if(!Block.isValidBlock(blockchain[index-1], block))
+									dataWrapRef.current.classList.add("invalid")
+								else dataWrapRef.current.classList.remove("invalid")
+							}, [blockchain])
+
+							useEffect(() => {
+								if(blockHashRef.current === null) return
+								blockHashRef.current.value = Block.calHashOfBlock(block.header)
+							}, [block.header])
+
+							useEffect(() => {
+								if(merkleRootRef.current === null) return
+								merkleRootRef.current.value = Block.calMerkleRoot(block.body)
+							}, [block.body])
+
+							return (
+								<BlockWrap key={block.header.index}>
+									<Title>Block #{block.header.index}</Title>
+									<DataWrap ref={dataWrapRef} className={Block.isValidBlock(blockchain[index-1], block) ? "" : "invalid"}>
+										<Column>
+											<DataBox>
 												<Row>
-													<Attribute>Difficulty</Attribute>
-													<Input name="difficulty" defaultValue={block.header.difficulty} type="number" />
+													<Attribute>Hash</Attribute>
+													<Input
+														className="important-value"
+														defaultValue={block.hash}
+														spellCheck={false}
+														ref= {blockHashRef}
+														readOnly
+													/>
 												</Row>
-												<Row>
-													<Attribute>Nonce</Attribute>
-													<Input name="nonce" defaultValue={block.header.nonce} type="number" />
-												</Row>
-												<Row>
-													<Attribute>Merkle Root</Attribute>
-													<Input name="merkleroot" defaultValue={block.header.merkleRoot} spellCheck={false} />
-												</Row>
-												<Row>
-													<Attribute>Prev Hash</Attribute>
-													<Input name="prevhash" className="important-value" defaultValue={block.header.prevHash} spellCheck={false} />
-												</Row>
-											</Column>
-										</DataBox>
-										<DataBox>
-											<SubTitle>Body</SubTitle>
-											<Row>
+											</DataBox>
+
+											<DataBox>
+												<SubTitle>Header</SubTitle>
 												<Column>
-													{block.body.map(
-														(data, bodyIndex) =>
-															!(typeof data === "string") && (
-																<Row
-																	key={
-																		data.from + data.to + data.amount + index
-																	}
-																	onChange={e => handleOnChangeBody(e, index, bodyIndex)}
-																>
-																	<Attribute>From:</Attribute> <Input defaultValue={data.from} spellCheck={false}/>
-																	<Attribute>To:</Attribute> <Input defaultValue={data.to} spellCheck={false}/>
-																	<Attribute>$</Attribute> <Input defaultValue={data.amount} type="number"/>
-																</Row>
-															)
-													)}
+													<Row>
+														<Attribute>Difficulty</Attribute>
+														<Input
+															name="difficulty"
+															defaultValue={block.header.difficulty}
+															type="number"
+															min={0}
+															onChange={(e) => handleOnChangeHeader(e, index)}
+														/>
+													</Row>
+													<Row>
+														<Attribute>Nonce</Attribute>
+														<Input
+															name="nonce"
+															defaultValue={block.header.nonce}
+															type="number"
+															min={0}
+															onChange={(e) => handleOnChangeHeader(e, index)}
+														/>
+													</Row>
+													<Row>
+														<Attribute>Merkle Root</Attribute>
+														<Input
+															name="merkleroot"
+															className="important-value"
+															defaultValue={block.header.merkleRoot}
+															spellCheck={false}
+															readOnly
+															ref={merkleRootRef}
+															onChange={(e) => handleOnChangeHeader(e, index)}
+														/>
+													</Row>
+													<Row>
+														<Attribute>Prev Hash</Attribute>
+														<Input
+															name="prevhash"
+															className="important-value"
+															defaultValue={block.header.prevHash}
+															spellCheck={false}
+															readOnly
+															onChange={(e) => handleOnChangeHeader(e, index)}
+														/>
+													</Row>
 												</Column>
-											</Row>
-										</DataBox>
-									</Column>
-								</DataWrap>
-							</BlockWrap>
-						))
+											</DataBox>
+											<DataBox>
+												<SubTitle>Body</SubTitle>
+												<Row>
+													<Column>
+														{block.body.map((data, bodyIndex) => (
+															<Row
+																key={"body" + bodyIndex}
+															>
+																<Attribute>From:</Attribute>{" "}
+																<Input
+																	name="from"
+																	defaultValue={data.from}
+																	spellCheck={false}
+																	onChange={(e) =>
+																		handleOnChangeBody(e, index, bodyIndex)
+																	}
+																/>
+																<Attribute>To:</Attribute>{" "}
+																<Input
+																	name="to"
+																	defaultValue={data.to}
+																	spellCheck={false}
+																	onChange={(e) =>
+																		handleOnChangeBody(e, index, bodyIndex)
+																	}
+																/>
+																<Attribute>$</Attribute>{" "}
+																<Input
+																	name="amount"
+																	defaultValue={data.amount}
+																	type="number"
+																	onChange={(e) =>
+																		handleOnChangeBody(e, index, bodyIndex)
+																	}
+																/>
+															</Row>
+														))}
+													</Column>
+												</Row>
+											</DataBox>
+											<BtnBox>
+												<Btn
+													onClick={(e) => {
+														e.preventDefault();
+														console.log(block.header);
+													}}
+													disabled={Block.isValidBlock(blockchain[index-1], block)}
+												>
+													Mine
+												</Btn>
+											</BtnBox>
+										</Column>
+									</DataWrap>
+								</BlockWrap>
+							);})
 						.reverse()}
 				</Content>
 			</Wrap>
