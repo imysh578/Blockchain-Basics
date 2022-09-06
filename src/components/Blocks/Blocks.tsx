@@ -16,58 +16,79 @@ import {
 	Title,
 	Wrap,
 	BtnBox,
-	Btn
+	Btn,
 } from "./styled";
 
 const Blocks: React.FC<BlockComponent.Props> = ({ peer }) => {
-	const {blockchain, handleOnChangeHeader, handleOnChangeBody} = useCreatePeerBlocks(peer);
-
-	useEffect(() => {
-		console.log(blockchain)
-	}, [blockchain])
+	const {
+		blockchain,
+		setBlockchain,
+		handleOnChangeHeader,
+		handleOnChangeBody,
+	} = useCreatePeerBlocks(peer);
 
 	return (
 		<Container>
 			{<h1>Peer {peer}</h1>}
+			{Block.calHashOfBlock(blockchain[1].header)}
 			<Wrap>
 				<Content>
 					{/* Blocks */}
 					{blockchain
 						.map((block, index) => {
-							const blockHashRef: React.MutableRefObject<null | HTMLInputElement> = useRef(null)
-							const merkleRootRef: React.MutableRefObject<null | HTMLInputElement> = useRef(null)
-							const dataWrapRef: React.MutableRefObject<null | HTMLFormElement> = useRef(null)
+							const dataWrapRef: React.MutableRefObject<null | HTMLFormElement> =
+								useRef(null);
 
 							useEffect(() => {
-								if(!dataWrapRef.current) return
-								if(!Block.isValidBlock(blockchain[index-1], block))
-									dataWrapRef.current.classList.add("invalid")
-								else dataWrapRef.current.classList.remove("invalid")
-							}, [blockchain])
+								if (!dataWrapRef.current) return;
+								if (!Block.isValidBlock(blockchain[index - 1], block))
+									dataWrapRef.current.classList.add("invalid");
+								else dataWrapRef.current.classList.remove("invalid");
+							}, [block]);
 
 							useEffect(() => {
-								if(blockHashRef.current === null) return
-								blockHashRef.current.value = Block.calHashOfBlock(block.header)
-							}, [block.header])
+								block = { ...block, hash: Block.calHashOfBlock(block.header) };
+								setBlockchain((prev) => {
+									const blocksCopy = [...prev];
+									blocksCopy[index] = block;
+									return blocksCopy;
+								});
+							}, [block.header]);
 
 							useEffect(() => {
-								if(merkleRootRef.current === null) return
-								merkleRootRef.current.value = Block.calMerkleRoot(block.body)
-							}, [block.body])
+								if (!!blockchain[index - 1])
+									setBlockchain((prev) => {
+										let blocksCopy = [...prev];
+										let blockCopy = { ...blocksCopy[index] };
+										blockCopy.header = {
+											...blockCopy.header,
+											prevHash: blockchain[index - 1]?.hash,
+										};
+										blocksCopy[index] = blockCopy;
+										return blocksCopy;
+									});
+							}, [blockchain[index - 1]?.hash]);
 
 							return (
-								<BlockWrap key={block.header.index}>
+								<BlockWrap key={"peer" + peer + "block" + block.header.index}>
 									<Title>Block #{block.header.index}</Title>
-									<DataWrap ref={dataWrapRef} className={Block.isValidBlock(blockchain[index-1], block) ? "" : "invalid"}>
+									<DataWrap
+										ref={dataWrapRef}
+										className={
+											Block.isValidBlock(blockchain[index - 1], block)
+												? ""
+												: "invalid"
+										}
+									>
 										<Column>
 											<DataBox>
 												<Row>
 													<Attribute>Hash</Attribute>
 													<Input
 														className="important-value"
+														key={block.hash}
 														defaultValue={block.hash}
 														spellCheck={false}
-														ref= {blockHashRef}
 														readOnly
 													/>
 												</Row>
@@ -82,7 +103,7 @@ const Blocks: React.FC<BlockComponent.Props> = ({ peer }) => {
 															name="difficulty"
 															defaultValue={block.header.difficulty}
 															type="number"
-															min={0}
+															min={1}
 															onChange={(e) => handleOnChangeHeader(e, index)}
 														/>
 													</Row>
@@ -101,10 +122,10 @@ const Blocks: React.FC<BlockComponent.Props> = ({ peer }) => {
 														<Input
 															name="merkleroot"
 															className="important-value"
+															key={block.header.merkleRoot}
 															defaultValue={block.header.merkleRoot}
 															spellCheck={false}
 															readOnly
-															ref={merkleRootRef}
 															onChange={(e) => handleOnChangeHeader(e, index)}
 														/>
 													</Row>
@@ -113,6 +134,7 @@ const Blocks: React.FC<BlockComponent.Props> = ({ peer }) => {
 														<Input
 															name="prevhash"
 															className="important-value"
+															key={block.header.prevHash}
 															defaultValue={block.header.prevHash}
 															spellCheck={false}
 															readOnly
@@ -126,9 +148,7 @@ const Blocks: React.FC<BlockComponent.Props> = ({ peer }) => {
 												<Row>
 													<Column>
 														{block.body.map((data, bodyIndex) => (
-															<Row
-																key={"body" + bodyIndex}
-															>
+															<Row key={"body" + bodyIndex}>
 																<Attribute>From:</Attribute>{" "}
 																<Input
 																	name="from"
@@ -167,7 +187,10 @@ const Blocks: React.FC<BlockComponent.Props> = ({ peer }) => {
 														e.preventDefault();
 														console.log(block.header);
 													}}
-													disabled={Block.isValidBlock(blockchain[index-1], block)}
+													disabled={Block.isValidBlock(
+														blockchain[index - 1],
+														block
+													)}
 												>
 													Mine
 												</Btn>
@@ -175,8 +198,9 @@ const Blocks: React.FC<BlockComponent.Props> = ({ peer }) => {
 										</Column>
 									</DataWrap>
 								</BlockWrap>
-							);})
-						.reverse()}
+							);
+						})
+						}
 				</Content>
 			</Wrap>
 		</Container>

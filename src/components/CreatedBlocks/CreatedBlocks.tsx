@@ -84,7 +84,7 @@ const CreatedBlocks = () => {
 								</DataWrap>
 							</Block>
 						))
-						.reverse()}
+						}
 				</Content>
 			</Wrap>
 		</Container>
