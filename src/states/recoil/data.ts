@@ -114,7 +114,7 @@ export let blockData = [
     ],
   },
 
-] as Block[];
+] as Block<Tx>[];
 
 
 const difficulty = 4;
@@ -150,9 +150,9 @@ let bodys = [
 ] as Tx[][]
 let blocks = [
 	
-] as Block[]
+] as Block<Tx>[]
 
-const createBlocks = () => {
+const createSampleBlocks = () => {
 	for (let i = 0; i < bodys.length; i++) {
 		let body = bodys[i]
 		let header: BlockHeader = {
@@ -164,7 +164,6 @@ const createBlocks = () => {
 			timestamp: 0,
 		}
 		const newBlock = Block.createNewBlock(header, body)
-		console.log(newBlock)
-		Block.mineNewBlock(newBlock, blocks);
+		Block.addNewBlock(newBlock, blocks);
 	}
 }

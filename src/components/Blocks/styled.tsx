@@ -76,15 +76,11 @@ export const DataWrap = styled.form`
 
 export const DataBox = styled.div`
 	width: 100%;
-	padding: 1rem;
+	padding: 0.5rem 1rem;
   border: 2px solid ${({ theme }) => theme.color.black};
 	border-radius: 1rem;
   background: ${({ theme }) => theme.color.white};
 `;
-
-export const TextBox = styled.div`
-	
-`
 
 export const Attribute = styled.h3`
 	width: 8rem;

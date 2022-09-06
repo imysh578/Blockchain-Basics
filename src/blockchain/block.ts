@@ -86,20 +86,20 @@ export class Block<T> {
 	}
 
 	static isValidBlock = (prevBlock: Block<any> | undefined, currentBlock: Block<any>): boolean => {
+		if(!this.isValidBlockHash(currentBlock)) return false
 		if(!prevBlock) return true
 		if(prevBlock.hash === currentBlock.hash) return false 
 		if(prevBlock.header.index >= currentBlock.header.index) return false 
 		if(prevBlock.hash !== currentBlock.header.prevHash) return false 
-		if(!this.isValidBlockHash(currentBlock)) return false
 		return true
 	}
 
 	static isValidNewBlock = (lastBlock: Block<any> | null | undefined, newBlock: Block<any>): boolean => {
+		if(!this.isValidBlockHash(newBlock)) return false
 		if(!lastBlock) return true
 		if(lastBlock.hash === newBlock.hash) return false 
 		if(lastBlock.header.index >= newBlock.header.index) return false 
 		if(lastBlock.hash !== newBlock.header.prevHash) return false 
-		if(!this.isValidBlockHash(newBlock)) return false
 		return true
 	}
 
@@ -134,10 +134,37 @@ export class Block<T> {
 		return newBlock
 	}
 
-	static mineNewBlock = (newBlock: Block<any>, blocks: Block<any>[]): boolean => {
+	static addNewBlock = (newBlock: Block<any>, blocks: Block<any>[]): boolean => {
 		if(!this.isValidNewBlock(blocks[blocks.length-1], newBlock)) return false
 		
 		blocks.push(newBlock)
 		return true;
+	}
+
+	static createNewBlockWithoutTimestampChange = (block: Block<Tx>) => {
+		const index = block.header.index;
+		const prevHash = block.header.prevHash;
+		const difficulty = block.header.difficulty;
+		const merkleRoot = block.header.merkleRoot
+		const timestamp: number = block.header.timestamp;
+		let nonce: number = 0;
+
+		let newBlockHeader: BlockHeader;
+		let newBlockHash: string;
+
+		do {
+			newBlockHeader = new BlockHeader(
+				index,
+				prevHash,
+				merkleRoot,
+				timestamp,
+				difficulty,
+				nonce++
+			);
+			newBlockHash = Block.calHashOfBlock(newBlockHeader);
+		} while (!Block.findValidBlockHash(newBlockHash, difficulty));
+
+		const newBlock = new Block(newBlockHash, newBlockHeader, block.body);
+		return newBlock
 	}
 }

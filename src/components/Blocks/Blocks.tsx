@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Block } from "../../blockchain/block";
 import { useCreatePeerBlocks } from "../../hooks/useCreatePeerBlocks";
 
@@ -30,7 +30,6 @@ const Blocks: React.FC<BlockComponent.Props> = ({ peer }) => {
 	return (
 		<Container>
 			{<h1>Peer {peer}</h1>}
-			{Block.calHashOfBlock(blockchain[1].header)}
 			<Wrap>
 				<Content>
 					{/* Blocks */}
@@ -68,6 +67,15 @@ const Blocks: React.FC<BlockComponent.Props> = ({ peer }) => {
 										return blocksCopy;
 									});
 							}, [blockchain[index - 1]?.hash]);
+
+							const handleOnClickMine = (e: React.MouseEvent, index: number) => {
+								e.preventDefault();
+								setBlockchain(prev => {
+									let blocksCopy = [...prev] 
+									blocksCopy[index] = Block.createNewBlockWithoutTimestampChange(blocksCopy[index])
+									return blocksCopy
+								})
+							}
 
 							return (
 								<BlockWrap key={"peer" + peer + "block" + block.header.index}>
@@ -111,6 +119,7 @@ const Blocks: React.FC<BlockComponent.Props> = ({ peer }) => {
 														<Attribute>Nonce</Attribute>
 														<Input
 															name="nonce"
+															key={block.header.nonce}
 															defaultValue={block.header.nonce}
 															type="number"
 															min={0}
@@ -183,10 +192,7 @@ const Blocks: React.FC<BlockComponent.Props> = ({ peer }) => {
 											</DataBox>
 											<BtnBox>
 												<Btn
-													onClick={(e) => {
-														e.preventDefault();
-														console.log(block.header);
-													}}
+													onClick={e => handleOnClickMine(e, index)}
 													disabled={Block.isValidBlock(
 														blockchain[index - 1],
 														block
