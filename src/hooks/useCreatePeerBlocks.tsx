@@ -1,25 +1,14 @@
 import React, { useEffect } from "react";
-import { Tx } from "../blockchain/transaction";
-import { ec } from "elliptic";
-import { blockchainState, peerOneBlockchainState, peerThreeBlockchainState, peerTwoBlockchainState } from "../states/recoil/blockchain";
-import { useRecoilValue } from "recoil";
+import {
+	peerOneBlockchainState,
+	peerThreeBlockchainState,
+	peerTwoBlockchainState,
+} from "../states/recoil/blockchain";
+import { useRecoilState } from "recoil";
+import { Block } from "../blockchain/block";
 
-
-const EC = new ec("secp256k1")
-
-const createPublicKey = () => {
-  const keyPair = EC.genKeyPair()
-  const publicKey = keyPair.getPublic("hex");
-  return publicKey;
-}
-
-const accounts: string[] = [];
-for (let i = 0; i < 100; i++) {
-  accounts.push(createPublicKey())
-}
-
-export const useCreatePeerBlocks = (peer?: number) => {
-  let chainState = blockchainState;
+export const useCreatePeerBlocks = (peer: number) => {
+	let chainState;
 	switch (peer) {
 		case 1:
 			chainState = peerOneBlockchainState;
@@ -31,10 +20,57 @@ export const useCreatePeerBlocks = (peer?: number) => {
 			chainState = peerThreeBlockchainState;
 			break;
 		default:
-			chainState = blockchainState;
+			chainState = peerOneBlockchainState;
 			break;
 	}
-  const blockchain = useRecoilValue(chainState)
 
-  return blockchain;
+	const [blockchain, setBlockchain] = useRecoilState(chainState);
+
+	const handleOnChangeHeader = (
+		e: React.ChangeEvent<HTMLInputElement>,
+		index: number
+	) => {
+		setBlockchain((prev) => {
+			let blocksCopy = [...prev];
+			let blockCopy = { ...blocksCopy[index] };
+			blockCopy.header = {
+				...blockCopy.header,
+				[e.target.name]: e.target.value,
+			};
+			blockCopy.hash = Block.calHashOfBlock(blockCopy.header);
+			blocksCopy[index] = blockCopy;
+
+			if(!!blocksCopy[index + 1]) {
+				let nextBlockCopy = { ...blocksCopy[index + 1] };
+				nextBlockCopy.header = {...nextBlockCopy.header, prevHash: blockCopy.hash}
+				blocksCopy[index+1] = nextBlockCopy
+			}
+			return blocksCopy;
+		});
+	};
+
+	const handleOnChangeBody = (
+		e: React.ChangeEvent<HTMLInputElement>,
+		blockIndex: number,
+		bodyIndex: number
+	) => {
+		setBlockchain((prev) => {
+			let blocksCopy = [...prev];
+			let blockCopy = { ...blocksCopy[blockIndex] };
+			let headerCopy = { ...blockCopy.header };
+			let bodyCopy = [...blockCopy.body];
+			let dataCopy = { ...bodyCopy[bodyIndex] };
+			dataCopy = { ...dataCopy, [e.target.name]: e.target.value };
+			bodyCopy[bodyIndex] = dataCopy;
+			headerCopy.merkleRoot = Block.calMerkleRoot(bodyCopy);
+			blockCopy.body = bodyCopy;
+			blockCopy.header = headerCopy;
+			blockCopy.hash = Block.calHashOfBlock(blockCopy.header);
+			blocksCopy[blockIndex] = blockCopy;
+
+			return blocksCopy;
+		});
+	};
+
+	return { blockchain, setBlockchain, handleOnChangeHeader, handleOnChangeBody };
 };

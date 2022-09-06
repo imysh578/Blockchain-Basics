@@ -1,4 +1,4 @@
-import axios from "axios";
+import { AxiosError } from "axios";
 import React from "react";
 import { Btn, Container, ErrorTitle, ErrorMsg, Box, BtnBox } from "./styled";
 
@@ -10,7 +10,7 @@ const Error: React.FC<ErrorComponent.Props> = ({ error, onClick }) => {
 	};
 
 	// Axios error page
-	if (axios.isAxiosError(error)) return (
+	if (error instanceof AxiosError) return (
 		<Container>
 			<ErrorTitle>Opps! Error occurred😱</ErrorTitle>
 			<Box>

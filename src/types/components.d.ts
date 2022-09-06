@@ -1,5 +1,7 @@
 import { AxiosError, AxiosResponse } from "axios";
 
+export {}
+
 declare global {
 	namespace ErrorComponent {
 		interface Props {
@@ -14,9 +16,17 @@ declare global {
 		}
 	}
 
+	namespace BlocksComponent {
+		interface Props {
+			peer: number;
+		}
+	}
+
 	namespace BlockComponent {
 		interface Props {
-			peer?: number;
+			peer: number;
+			index: number;
+			block: Block<Tx>;
 		}
 	}
 }

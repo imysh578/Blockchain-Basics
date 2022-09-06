@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import {
 	Column,
 	Btn,
-	BtnBox,
 	Container,
 	Form,
 	Input,
@@ -28,8 +27,8 @@ import { delay } from "../../utils";
 
 const CreateBlockForm = () => {
 	// useStates
-	const [newBlock, setNewBlock] = useState<null | Block>(null);
-	const [lastBlock, setLastBlock] = useState<null | Block>(null);
+	const [newBlock, setNewBlock] = useState<null | Block<string>>(null);
+	const [lastBlock, setLastBlock] = useState<null | Block<string>>(null);
 
 	// Recoils
 	const [blockchain, setBlockchain] = useRecoilState(blockchainState);
@@ -39,10 +38,6 @@ const CreateBlockForm = () => {
 	const resetBodyData = useResetRecoilState(bodyDataInputState);
 
 	// Refs
-	const difficultyRef: React.MutableRefObject<null | HTMLInputElement> =
-		useRef(null);
-	const nonceRef: React.MutableRefObject<null | HTMLInputElement> =
-		useRef(null);
 	const bodyInputRef: React.MutableRefObject<null | HTMLTextAreaElement> =
 		useRef(null);
 
@@ -130,7 +125,7 @@ const CreateBlockForm = () => {
 			setHeaderData((prev) => ({ ...prev, nonce: nonce++, timestamp }));
 			newBlockHash = Block.calHashOfBlock(newBlockHeader);
 			await delay(1);
-		} while (!Block.isValidBlockHash(newBlockHash, difficulty));
+		} while (!Block.findValidBlockHash(newBlockHash, difficulty));
 		const newBlock = new Block(newBlockHash, newBlockHeader, bodyData);
 		setNewBlock(newBlock);
 	};
@@ -172,7 +167,7 @@ const CreateBlockForm = () => {
 	const isReadyToMine = () =>
 		!!newBlock &&
 		
-		Block.isValidBlockHash(
+		Block.findValidBlockHash(
 			Block.calHashOfBlock(headerData),
 			headerData.difficulty
 		);
@@ -203,7 +198,6 @@ const CreateBlockForm = () => {
 									defaultValue={headerData.difficulty}
 									min={DEFAULT.DIFFICULTY}
 									required
-									ref={difficultyRef}
 									onChange={handleOnChangeHeaderDataInput}
 								/>
 							</Column>
@@ -217,7 +211,6 @@ const CreateBlockForm = () => {
 									value={headerData.nonce}
 									min={DEFAULT.NONCE}
 									required
-									ref={nonceRef}
 									onChange={handleOnChangeHeaderDataInput}
 								/>
 							</Column>

@@ -101,8 +101,8 @@ export const mixins = {
 };
 
 export const animation = {
-	fadeIn: (transition = "0.5", period = "0.5", repeat = "1") => `
-		transition: all ${transition}s;
+	fadeIn: (transition = "0.8", period = "0.8", repeat = "1") => `
+		transition: ease ${transition}s;
 		animation: fadeIn ${period}s ${repeat};
 
 		@keyframes fadeIn {
@@ -116,34 +116,17 @@ export const animation = {
 		}
 	`,
 
-	rightToLeft: (transition = "0.", period = "1", repeat = "1") => `
+	topToBottom: (transition = "1", period = "1", repeat = "1") => `
 		transition: all ${transition}s;
-		animation: rightToLeft ${period}s ${repeat};
+		animation: topToBottom ${period}s ${repeat};
 
-		@keyframes rightToLeft {
+		@keyframes topToBottom {
 			0% {
-				transform: translateX(-100%);
+				transform: translateY(-100%);
 			}
 
 			100% {
-				transfrom: translateX(0%);
-			}
-		}
-	`,
-
-	scaleUp: (transition = "0.5", period = "1", repeat = "1") => `
-		transition: all ${transition}s;
-		animation: scaleUp ${period}s ${repeat};
-
-		@keyframes scaleUp {
-			0% {
-				transform: scale(0);
-				opacity: 0;
-			}
-
-			100% {
-				transform: scale(1);
-				opacity: 1;
+				transfrom: translateY(0%);
 			}
 		}
 	`,
